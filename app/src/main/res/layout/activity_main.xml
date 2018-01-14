@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.android.movieprojectpart1.MainActivity">
-
-    <ImageView
-        android:layout_width="185dp"
-        android:layout_height="274dp"
-        android:id="@+id/singlePosterImage"
-        android:src="@drawable/movie_db_logo"/>
-    <TextView
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/errorText"
-        android:text="@string/error_message"
-        android:visibility="invisible"/>
-
-</FrameLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:layout_width="185dp"
+            android:layout_height="274dp"
+            android:id="@+id/singlePosterImage"
+            android:src="@drawable/movie_db_logo"/>
+        <TextView
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/errorText"
+            android:text="@string/error_message"
+            android:visibility="invisible"/>
+    </FrameLayout>
+</ScrollView>
