@@ -1,10 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.android.movieprojectpart1.DetailActivity">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:text="movie title"
+        android:id="@+id/movieTitle"
+        android:layout_centerHorizontal="true"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:text="movie tagline"
+        android:id="@+id/movieTagline"
+        android:layout_below="@+id/movieTitle"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:text="movie release date"
+        android:id="@+id/movieReleased"
+        android:layout_below="@+id/movieTagline"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:text="movie revenue"
+        android:id="@+id/movieRevenue"
+        android:layout_below="@+id/movieReleased"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:text="movie runtime"
+        android:id="@+id/movieRuntime"
+        android:layout_below="@+id/movieRevenue"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:text="movie vote rating"
+        android:id="@+id/movieVote"
+        android:layout_below="@+id/movieRuntime"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:text="movie overview"
+        android:id="@+id/movieOverview"
+        android:layout_below="@+id/moviePoster"
+        />
 
-</android.support.constraint.ConstraintLayout>
+    <ImageView
+        android:layout_width="160dp"
+        android:layout_height="240dp"
+        android:id="@+id/moviePoster"
+        android:layout_toRightOf="@+id/movieTagline"
+        android:layout_below="@+id/movieTitle"
+        android:padding="10dp"
+        android:layout_marginLeft="50dp"/>
+
+
+</RelativeLayout>
