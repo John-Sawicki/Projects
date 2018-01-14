@@ -1,5 +1,6 @@
 package com.example.android.movieprojectpart1;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,26 +19,28 @@ public class MainActivity extends AppCompatActivity {
     String searchMethod;
     String[][] moviesInfo = new String[20][5];   //20 search results and 5 data points per movie
     String[] movieInfo = new String [5];//test for 1 movie
-    String moviddbUrl;
+    String moviddbUrl="https://api.themoviedb.org/3/movie/popular?api_key=aee0191cd58fbf42dd0218a905b434eb&language=en-US&page=1";
     ImageView poster;
     TextView errorMessage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        moviddbUrl = "https://api.themoviedb.org/3/movie/popular?api_key=aee0191cd58fbf42dd0218a905b434eb&language=en-US&page=1";
+        //moviddbUrl = "https://api.themoviedb.org/3/movie/popular?api_key=aee0191cd58fbf42dd0218a905b434eb&language=en-US&page=1";
         new GetMovieInfoTask().execute(moviddbUrl);
         poster = findViewById(R.id.singlePosterImage);
         errorMessage = findViewById(R.id.errorText);
         errorMessage.setVisibility(View.INVISIBLE);     //only shows if there is am error retrieving json data
-        /*
+
         poster.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+                intent.putExtra("detail data",movieInfo);
+                startActivity(intent);
             }
         });
-        */
+
     }
     public class GetMovieInfoTask extends AsyncTask<String, Void, String[]>{
         @Override
@@ -83,10 +86,14 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int menuItemClicked = item.getItemId();
         if(menuItemClicked==R.id.menu_popular){
-            searchMethod="popular"; Log.d("menu", "popular menu clicked");
+            moviddbUrl = "https://api.themoviedb.org/3/movie/popular?api_key=aee0191cd58fbf42dd0218a905b434eb&language=en-US&page=1";
+            Log.d("menu", "popular menu clicked");
+            new GetMovieInfoTask().execute(moviddbUrl);
         }
         if(menuItemClicked==R.id.menu_rating){
-            searchMethod="top_rated"; Log.d("menu", "rating menu clicked");
+            moviddbUrl="https://api.themoviedb.org/3/movie/top_rated?api_key=aee0191cd58fbf42dd0218a905b434eb&language=en-US&page=1";
+            Log.d("menu", "rating menu clicked");
+            new GetMovieInfoTask().execute(moviddbUrl);
         }
         return true;
     }
