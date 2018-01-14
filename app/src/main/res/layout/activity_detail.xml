@@ -6,13 +6,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.android.movieprojectpart1.DetailActivity">
+
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textSize="24sp"
+                            android:textSize="30sp"
                             android:text="movie title"
                             android:id="@+id/movieTitle"
-                            android:layout_centerHorizontal="true"/>
+                            android:gravity="center"
+                            android:padding="30dp"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -21,14 +23,18 @@
         android:textStyle="bold"
         android:text="Release Date"
         android:id="@+id/releaseTitle"
-        android:layout_below="@+id/movieTitle"/>
+        android:layout_below="@+id/movieTitle"
+        android:paddingTop="60dp"
+        android:paddingLeft="15dp"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="16sp"
         android:text="movie release date"
         android:id="@+id/movieReleased"
-        android:layout_below="@+id/releaseTitle"/>
+        android:layout_below="@+id/releaseTitle"
+        android:paddingTop="10dp"
+        android:paddingLeft="15dp"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -37,24 +43,18 @@
         android:textStyle="bold"
         android:text="User Rating"
         android:id="@+id/voteTitle"
-        android:layout_below="@+id/movieReleased"/>
+        android:layout_below="@+id/movieReleased"
+        android:paddingTop="10dp"
+        android:paddingLeft="15dp"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="16sp"
         android:text="movie runtime"
         android:id="@+id/movieVote"
-        android:layout_below="@+id/voteTitle"/>
-
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:text="movie overview"
-        android:id="@+id/movieOverview"
-        android:layout_below="@+id/moviePoster"/>
-
+        android:layout_below="@+id/voteTitle"
+        android:paddingTop="10dp"
+        android:paddingLeft="15dp"/>
                                                             <ImageView
                                                                 android:layout_width="185dp"
                                                                 android:layout_height="274dp"
@@ -63,6 +63,15 @@
                                                                 android:layout_below="@+id/movieTitle"
                                                                 android:padding="10dp"
                                                                 android:layout_marginLeft="50dp"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:text="movie overview"
+                    android:id="@+id/movieOverview"
+                    android:layout_below="@+id/moviePoster"
+                    android:paddingTop="10dp"
+                    android:paddingLeft="15dp"/>
 
 
 </RelativeLayout>
