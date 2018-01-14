@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.movieprojectpart1.utilities.JsonUtility;
+import com.squareup.picasso.Picasso;
 
 public class MainActivity extends AppCompatActivity {
     String searchMethod;
@@ -26,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         moviddbUrl = "https://api.themoviedb.org/3/movie/popular?api_key=aee0191cd58fbf42dd0218a905b434eb&language=en-US&page=1";
         new GetMovieInfoTask().execute(moviddbUrl);
-        poster = findViewById(R.id.moviePoster);
+        poster = findViewById(R.id.singlePosterImage);
         errorMessage = findViewById(R.id.errorText);
         errorMessage.setVisibility(View.INVISIBLE);     //only shows if there is am error retrieving json data
         /*
@@ -56,13 +57,20 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String[] strings) {
             String imageBaseURL = "https://image.tmdb.org/t/p/w185";
+            String fullURL = "";
             if(strings!=null){
-                movieInfo = strings;    Log.d("onPost", movieInfo[0]);
+                movieInfo = strings;    Log.d("onPost", movieInfo[0]);  //copy the async result to the variable on the UI thread to send to detail activity
                 Log.d("onPost", imageBaseURL+movieInfo[0]);
-                //poster.setVisibility(View.VISIBLE); errorMessage.setVisibility(View.INVISIBLE);
+                fullURL = imageBaseURL+movieInfo[0]; Log.d("onPost", fullURL);
+                //Picasso.with(getApplicationContext()).load(imageBaseURL+movieInfo[0]).into(poster);
+                Picasso.with(getApplicationContext())
+                        .load(imageBaseURL+movieInfo[0])
+                        .into(poster);
+                poster.setVisibility(View.VISIBLE); errorMessage.setVisibility(View.INVISIBLE);
             }else{
                 poster.setVisibility(View.INVISIBLE); errorMessage.setVisibility(View.VISIBLE);
             }
+
         }
     }
     @Override

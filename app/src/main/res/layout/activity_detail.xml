@@ -56,8 +56,8 @@
         android:layout_below="@+id/moviePoster"/>
 
                                                             <ImageView
-                                                                android:layout_width="154dp"
-                                                                android:layout_height="228.15dp"
+                                                                android:layout_width="185dp"
+                                                                android:layout_height="274dp"
                                                                 android:id="@+id/moviePoster"
                                                                 android:layout_toRightOf="@+id/movieReleased"
                                                                 android:layout_below="@+id/movieTitle"
