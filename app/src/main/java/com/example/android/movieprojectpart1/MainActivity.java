@@ -7,6 +7,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.android.movieprojectpart1.utilities.JsonUtility;
 
@@ -15,24 +18,51 @@ public class MainActivity extends AppCompatActivity {
     String[][] moviesInfo = new String[20][5];   //20 search results and 5 data points per movie
     String[] movieInfo = new String [5];//test for 1 movie
     String moviddbUrl;
+    ImageView poster;
+    TextView errorMessage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         moviddbUrl = "https://api.themoviedb.org/3/movie/popular?api_key=aee0191cd58fbf42dd0218a905b434eb&language=en-US&page=1";
         new GetMovieInfoTask().execute(moviddbUrl);
+        poster = findViewById(R.id.moviePoster);
+        errorMessage = findViewById(R.id.errorText);
+        errorMessage.setVisibility(View.INVISIBLE);     //only shows if there is am error retrieving json data
+        /*
+        poster.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+        */
     }
     public class GetMovieInfoTask extends AsyncTask<String, Void, String[]>{
         @Override
         protected String[] doInBackground(String... strings) {
+            String[] parsedJson = new String[5];
             try{
                 String jsonStringFromWeb = JsonUtility.getResponseFromSite(strings[0]);
                 Log.d("json raw", jsonStringFromWeb);
-
+                parsedJson = JsonUtility.formatJson(jsonStringFromWeb);
+                return parsedJson;
             }catch(Exception e){
                 e.printStackTrace();
             }
-            return new String[0];
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String[] strings) {
+            String imageBaseURL = "https://image.tmdb.org/t/p/w185";
+            if(strings!=null){
+                movieInfo = strings;    Log.d("onPost", movieInfo[0]);
+                Log.d("onPost", imageBaseURL+movieInfo[0]);
+                //poster.setVisibility(View.VISIBLE); errorMessage.setVisibility(View.INVISIBLE);
+            }else{
+                poster.setVisibility(View.INVISIBLE); errorMessage.setVisibility(View.VISIBLE);
+            }
         }
     }
     @Override

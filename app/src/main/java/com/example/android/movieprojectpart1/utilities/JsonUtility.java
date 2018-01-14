@@ -48,7 +48,7 @@ public class JsonUtility {
                 formattedJson[4] = aMovie.getString("overview");Log.d("json",formattedJson[4]);
             }
 
-            return null;
+            return formattedJson;
         }catch(Exception e){
             e.printStackTrace(); return null;
         }
