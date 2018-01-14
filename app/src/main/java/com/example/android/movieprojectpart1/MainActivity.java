@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         moviddbUrl = "https://api.themoviedb.org/3/movie/popular?api_key=aee0191cd58fbf42dd0218a905b434eb&language=en-US&page=1";
+        new GetMovieInfoTask().execute(moviddbUrl);
     }
     public class GetMovieInfoTask extends AsyncTask<String, Void, String[]>{
         @Override
@@ -31,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
             }catch(Exception e){
                 e.printStackTrace();
             }
-
             return new String[0];
         }
     }
@@ -44,10 +44,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int menuItemClicked = item.getItemId();
-        if(menuItemClicked==R.id.menu_popular)
+        if(menuItemClicked==R.id.menu_popular){
             searchMethod="popular"; Log.d("menu", "popular menu clicked");
-        if(menuItemClicked==R.id.menu_rating)
+        }
+        if(menuItemClicked==R.id.menu_rating){
             searchMethod="top_rated"; Log.d("menu", "rating menu clicked");
+        }
         return true;
     }
 }

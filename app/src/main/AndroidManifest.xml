@@ -18,6 +18,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".DetailActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.android.movieprojectpart1.MainActivity" />
         </activity>
     </application>
 
