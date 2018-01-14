@@ -8,6 +8,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.example.android.movieprojectpart1.utilities.JsonUtility;
+
 public class MainActivity extends AppCompatActivity {
     String searchMethod;
     String[][] moviesInfo = new String[20][5];   //20 search results and 5 data points per movie
@@ -22,6 +24,14 @@ public class MainActivity extends AppCompatActivity {
     public class GetMovieInfoTask extends AsyncTask<String, Void, String[]>{
         @Override
         protected String[] doInBackground(String... strings) {
+            try{
+                String jsonStringFromWeb = JsonUtility.getResponseFromSite(strings[0]);
+                Log.d("json raw", jsonStringFromWeb);
+
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+
             return new String[0];
         }
     }
