@@ -36,16 +36,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, DetailActivity.class);
-                intent.putExtra("detail data",movieInfo);
+                intent.putExtra("detail data",moviesInfo);
                 startActivity(intent);
             }
         });
 
     }
-    public class GetMovieInfoTask extends AsyncTask<String, Void, String[]>{
+    public class GetMovieInfoTask extends AsyncTask<String, Void, String[][]>{
         @Override
-        protected String[] doInBackground(String... strings) {
-            String[] parsedJson = new String[5];
+        protected String[][] doInBackground(String... strings) {    //pass in url   return 2darray of parsed json
+            String[][] parsedJson = new String[20][5];
             try{
                 String jsonStringFromWeb = JsonUtility.getResponseFromSite(strings[0]);
                 Log.d("json raw", jsonStringFromWeb);
@@ -58,17 +58,19 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(String[] strings) {
+        protected void onPostExecute(String[][] strings) {
             String imageBaseURL = "https://image.tmdb.org/t/p/w185";
             String fullURL = "";
             if(strings!=null){
-                movieInfo = strings;    Log.d("onPost", movieInfo[0]);  //copy the async result to the variable on the UI thread to send to detail activity
-                Log.d("onPost", imageBaseURL+movieInfo[0]);
-                fullURL = imageBaseURL+movieInfo[0]; Log.d("onPost", fullURL);
+                moviesInfo = strings;    Log.d("onPost", moviesInfo[0][0]);  //copy the async result to the variable on the UI thread to send to detail activity
+                Log.d("onPost", imageBaseURL+moviesInfo[0][0]);
+                fullURL = imageBaseURL+moviesInfo[0][0]; Log.d("onPost", fullURL);
                 //Picasso.with(getApplicationContext()).load(imageBaseURL+movieInfo[0]).into(poster);
-                Picasso.with(getApplicationContext())
-                        .load(imageBaseURL+movieInfo[0])
-                        .into(poster);
+                for(int i=0; i<20;i++){
+                    Picasso.with(getApplicationContext())
+                            .load(imageBaseURL+moviesInfo[0][0])
+                            .into(poster);
+                }
                 poster.setVisibility(View.VISIBLE); errorMessage.setVisibility(View.INVISIBLE);
             }else{
                 poster.setVisibility(View.INVISIBLE); errorMessage.setVisibility(View.VISIBLE);

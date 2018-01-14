@@ -33,21 +33,25 @@ public class JsonUtility {
             urlConnection.disconnect();
         }
     }
-    public static String[] formatJson(String rawJSON) throws JSONException{
+    public static String[][] formatJson(String rawJSON) throws JSONException{
         String mRawJSON = rawJSON;
-        String formattedJson[]= new String[5];
+        String formattedJson[][]= new String[20][5];
         try{
             JSONObject movieJson = new JSONObject(mRawJSON);
             JSONArray movieArray = movieJson.getJSONArray("results");
-            for(int i=0; i<1;i++){
+            for(int i=0; i<20;i++){ //loop through all 20 movies in json data
                 JSONObject aMovie = movieArray.getJSONObject(i);
-                formattedJson[0] = aMovie.getString("poster_path"); Log.d("json",formattedJson[0]);
-                formattedJson[1] = aMovie.getString("original_title");Log.d("json",formattedJson[1]);
-                formattedJson[2] = aMovie.getString("release_date");Log.d("json",formattedJson[2]);
-                formattedJson[3] = ""+aMovie.getDouble("vote_average");Log.d("json",formattedJson[3]);
-                formattedJson[4] = aMovie.getString("overview");Log.d("json",formattedJson[4]);
+                formattedJson[i][0] = aMovie.getString("poster_path");
+                formattedJson[i][1] = aMovie.getString("original_title");
+                formattedJson[i][2] = aMovie.getString("release_date");
+                formattedJson[i][3] = ""+aMovie.getDouble("vote_average");
+                formattedJson[i][4] = aMovie.getString("overview");
             }
-
+            Log.d("json",formattedJson[0][0]);
+            Log.d("json",formattedJson[0][1]);
+            Log.d("json",formattedJson[0][2]);
+            Log.d("json",formattedJson[0][3]);
+            Log.d("json",formattedJson[0][4]);
             return formattedJson;
         }catch(Exception e){
             e.printStackTrace(); return null;
