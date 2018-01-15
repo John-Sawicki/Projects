@@ -2,12 +2,14 @@ package com.example.android.movieprojectpart1.utilities;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.example.android.movieprojectpart1.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -31,11 +33,13 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
     }
     @Override
     public void onBindViewHolder(MovieAdapterViewHolder holder, int position) {
-        String moviePosterUrl = moviePosterUrls[position];
-
-        int consoleImage = dummyImages[position];
-        holder.moviePosterImageView.setImageResource(consoleImage);    //used to test grid layout
-        //use Picasso on the view holder to set to grid_poster
+        String moviePosterUrl = moviePosterUrls[position];  Log.d("onBindVH", moviePosterUrl);
+         Context context = holder.moviePosterImageView.getContext();
+        Picasso.with(context)
+                .load(moviePosterUrl)
+                .into(holder.moviePosterImageView);
+        //int consoleImage = dummyImages[position];
+        //holder.moviePosterImageView.setImageResource(consoleImage);    //used to test grid layout
     }
     @Override
     public int getItemCount() {
