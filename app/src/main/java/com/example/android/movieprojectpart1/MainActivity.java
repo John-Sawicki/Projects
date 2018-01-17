@@ -13,12 +13,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.movieprojectpart1.utilities.JsonUtility;
 import com.example.android.movieprojectpart1.utilities.MovieAdapter;
 import com.squareup.picasso.Picasso;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MovieAdapter.GridItemClickListener{
     String searchMethod;
     String[][] moviesInfo = new String[20][5];   //20 search results and 5 data points per movie
     String[] movieInfo = new String [5];//test for 1 movie
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     String[] moviePosterUrls = new String[20];
     private RecyclerView mRecyclerView;
     private MovieAdapter mMovieAdapter;
+    Toast mToast;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         GridLayoutManager layoutManager = new GridLayoutManager(this,2);//vertical by default
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(true);
-        mMovieAdapter = new MovieAdapter();
+        mMovieAdapter = new MovieAdapter(20, this);
         mRecyclerView.setAdapter(mMovieAdapter);
 
         //moviddbUrl = "https://api.themoviedb.org/3/movie/popular?api_key=aee0191cd58fbf42dd0218a905b434eb&language=en-US&page=1";
@@ -69,7 +71,6 @@ public class MainActivity extends AppCompatActivity {
             }
             return null;
         }
-
         @Override
         protected void onPostExecute(String[][] strings) {
             String imageBaseURL = "https://image.tmdb.org/t/p/w185";
@@ -98,7 +99,6 @@ public class MainActivity extends AppCompatActivity {
                 mRecyclerView.setVisibility(View.INVISIBLE);
                 errorMessage.setVisibility(View.VISIBLE);
             }
-
         }
     }
     @Override
@@ -121,5 +121,24 @@ public class MainActivity extends AppCompatActivity {
             new GetMovieInfoTask().execute(moviddbUrl);
         }
         return true;
+    }
+
+    @Override
+    public void onGridItemClick(int index) {
+        //TODO check data sent to detail
+        //TODO create intent to send data to detail
+        if(mToast!=null){   //cancel toast when next item is clicked
+            mToast.cancel();
+        }
+        Log.d("listener", ""+index);
+        for(int i=0; i<5;i++){
+            movieInfo[i] = moviesInfo[index][i];    //transfer movie data based on the index clicked
+        }
+        Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+        intent.putExtra("detail data",movieInfo);
+        startActivity(intent);
+        String toastMessage = "Item #"+index+" clicked";
+        Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT);
+        //mToast.show();
     }
 }

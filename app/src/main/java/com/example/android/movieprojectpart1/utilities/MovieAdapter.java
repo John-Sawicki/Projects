@@ -20,7 +20,16 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
             R.drawable.atari, R.drawable.dreamcast, R.drawable.gamecube, R.drawable.genesis,
             R.drawable.nes, R.drawable.nsixtyfour, R.drawable.psfour, R.drawable.wii,
             R.drawable.atari, R.drawable.dreamcast, R.drawable.gamecube, R.drawable.genesis};  //used to test grid view 20 images
-    public MovieAdapter(){
+    private int mNumberOfMovies;
+    final private GridItemClickListener mOnClickListener; //reference to the interface
+    public MovieAdapter(int numberOfMovies, GridItemClickListener gridItemClickListener ){
+        mNumberOfMovies = numberOfMovies;
+        mOnClickListener = gridItemClickListener;
+    }
+
+
+    public interface GridItemClickListener{
+        void onGridItemClick(int index);
     }
     @Override
     public MovieAdapterViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
@@ -46,15 +55,23 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
         if(moviePosterUrls==null) return 0;
         return moviePosterUrls.length;
     }
-    public class MovieAdapterViewHolder extends RecyclerView.ViewHolder{
+    public class MovieAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public final ImageView moviePosterImageView;    //set the images to this in the poster_list_item layout
         public MovieAdapterViewHolder(View view){
             super(view);
             moviePosterImageView = view.findViewById(R.id.grid_poster);
+            view.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            int itemClicked = getAdapterPosition();
+            mOnClickListener.onGridItemClick(itemClicked);  //listener from constructor, method from interface
         }
     }
     public void setUrlData(String[] movieUrls){ //update data onPostExecute
         moviePosterUrls =movieUrls;
         notifyDataSetChanged(); //method of recycler view to update images
     }
+
 }
