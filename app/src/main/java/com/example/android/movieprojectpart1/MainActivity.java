@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.movieprojectpart1.utilities.API;
 import com.example.android.movieprojectpart1.utilities.JsonUtility;
 import com.example.android.movieprojectpart1.utilities.MovieAdapter;
 import com.squareup.picasso.Picasso;
@@ -23,7 +24,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
     String searchMethod;
     String[][] moviesInfo = new String[20][5];   //20 search results and 5 data points per movie
     String[] movieInfo = new String [5];//test for 1 movie
-    String moviddbUrl="https://api.themoviedb.org/3/movie/popular?api_key=aee0191cd58fbf42dd0218a905b434eb&language=en-US&page=1";
+    String moviddbUrl= "https://api.themoviedb.org/3/movie/popular?api_key="  + API.key +"&language=en-US&page=1";
     ImageView poster;
     TextView errorMessage;
     String[] moviePosterUrls = new String[20];
@@ -40,8 +41,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
         mRecyclerView.setHasFixedSize(true);
         mMovieAdapter = new MovieAdapter(20, this);
         mRecyclerView.setAdapter(mMovieAdapter);
-
-        //moviddbUrl = "https://api.themoviedb.org/3/movie/popular?api_key=aee0191cd58fbf42dd0218a905b434eb&language=en-US&page=1";
         new GetMovieInfoTask().execute(moviddbUrl);
         //poster = findViewById(R.id.singlePosterImage); replaced image with recycler view
         errorMessage = findViewById(R.id.errorText);
@@ -111,12 +110,12 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
     public boolean onOptionsItemSelected(MenuItem item) {
         int menuItemClicked = item.getItemId();
         if(menuItemClicked==R.id.menu_popular){
-            moviddbUrl = "https://api.themoviedb.org/3/movie/popular?api_key=aee0191cd58fbf42dd0218a905b434eb&language=en-US&page=1";
+            moviddbUrl = "https://api.themoviedb.org/3/movie/popular?api_key="  + API.key +"&language=en-US&page=1";
             Log.d("menu", "popular menu clicked");
             new GetMovieInfoTask().execute(moviddbUrl);
         }
         if(menuItemClicked==R.id.menu_rating){
-            moviddbUrl="https://api.themoviedb.org/3/movie/top_rated?api_key=aee0191cd58fbf42dd0218a905b434eb&language=en-US&page=1";
+            moviddbUrl="https://api.themoviedb.org/3/movie/top_rated?api_key="+   API.key +"&language=en-US&page=1";
             Log.d("menu", "rating menu clicked");
             new GetMovieInfoTask().execute(moviddbUrl);
         }
@@ -125,11 +124,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
 
     @Override
     public void onGridItemClick(int index) {
-        //TODO check data sent to detail
-        //TODO create intent to send data to detail
-        if(mToast!=null){   //cancel toast when next item is clicked
-            mToast.cancel();
-        }
         Log.d("listener", ""+index);
         for(int i=0; i<5;i++){
             movieInfo[i] = moviesInfo[index][i];    //transfer movie data based on the index clicked
@@ -137,8 +131,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
         Intent intent = new Intent(MainActivity.this, DetailActivity.class);
         intent.putExtra("detail data",movieInfo);
         startActivity(intent);
-        String toastMessage = "Item #"+index+" clicked";
-        Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT);
-        //mToast.show();
+
     }
 }
