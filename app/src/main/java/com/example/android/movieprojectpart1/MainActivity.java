@@ -11,26 +11,19 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.example.android.movieprojectpart1.utilities.API;
 import com.example.android.movieprojectpart1.utilities.JsonUtility;
 import com.example.android.movieprojectpart1.utilities.MovieAdapter;
-import com.squareup.picasso.Picasso;
 
 public class MainActivity extends AppCompatActivity implements MovieAdapter.GridItemClickListener{
-    String searchMethod;
-    String[][] moviesInfo = new String[20][5];   //20 search results and 5 data points per movie
-    String[] movieInfo = new String [5];//test for 1 movie
-    String moviddbUrl= "https://api.themoviedb.org/3/movie/popular?api_key="  + API.key +"&language=en-US&page=1";
-    ImageView poster;
-    TextView errorMessage;
-    String[] moviePosterUrls = new String[20];
+    private String[][] moviesInfo = new String[20][5];   //20 search results and 5 data points per movie
+    private String[] movieInfo = new String [5];//test for 1 movie
+    private String moviddbUrl= "https://api.themoviedb.org/3/movie/popular?api_key="  + API.key +"&language=en-US&page=1";
+    private TextView errorMessage;
+    private String[] moviePosterUrls = new String[20];
     private RecyclerView mRecyclerView;
     private MovieAdapter mMovieAdapter;
-    Toast mToast;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

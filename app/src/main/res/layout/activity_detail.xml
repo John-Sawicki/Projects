@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:text="Release Date"
+            android:text="@string/release_date"
             android:id="@+id/releaseTitle"
             android:layout_below="@+id/movieTitle"
             android:paddingTop="60dp"
@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:text="User Rating"
+            android:text="@string/user_rating"
             android:id="@+id/voteTitle"
             android:layout_below="@+id/movieReleased"
             android:paddingTop="10dp"
@@ -68,7 +68,8 @@
                                                                 android:layout_toRightOf="@+id/movieReleased"
                                                                 android:layout_below="@+id/movieTitle"
                                                                 android:padding="10dp"
-                                                                android:layout_marginLeft="50dp"/>
+                                                                android:layout_marginLeft="50dp"
+                                                                android:contentDescription="movie poster"/>
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"

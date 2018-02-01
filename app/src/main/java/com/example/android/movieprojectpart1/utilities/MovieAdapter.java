@@ -11,15 +11,9 @@ import android.widget.ImageView;
 import com.example.android.movieprojectpart1.R;
 import com.squareup.picasso.Picasso;
 
-import java.util.List;
-
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapterViewHolder> {
     private String[] moviePosterUrls;
-    private int[] dummyImages = {R.drawable.atari, R.drawable.dreamcast, R.drawable.gamecube, R.drawable.genesis,
-            R.drawable.nes, R.drawable.nsixtyfour, R.drawable.psfour, R.drawable.wii,
-            R.drawable.atari, R.drawable.dreamcast, R.drawable.gamecube, R.drawable.genesis,
-            R.drawable.nes, R.drawable.nsixtyfour, R.drawable.psfour, R.drawable.wii,
-            R.drawable.atari, R.drawable.dreamcast, R.drawable.gamecube, R.drawable.genesis};  //used to test grid view 20 images
+
     private int mNumberOfMovies;
     final private GridItemClickListener mOnClickListener; //reference to the interface
     public MovieAdapter(int numberOfMovies, GridItemClickListener gridItemClickListener ){

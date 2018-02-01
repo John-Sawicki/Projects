@@ -9,9 +9,9 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 public class DetailActivity extends AppCompatActivity {
-    TextView titleText, releaseDateText, userRatingText, overviewText;
-    ImageView moviePosterImage;
-    String[] movieData;
+    private TextView titleText, releaseDateText, userRatingText, overviewText;
+    private ImageView moviePosterImage;
+    private String[] movieData;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,7 +23,7 @@ public class DetailActivity extends AppCompatActivity {
         overviewText = findViewById(R.id.movieOverview);
 
         Intent intent = getIntent();
-        if(intent.hasExtra("detail data")==true){
+        if(intent.hasExtra("detail data")){   //if(intent.hasExtra("detail data")==true     before lint
             movieData= intent.getStringArrayExtra("detail data");
             Picasso.with(getApplicationContext())
                     .load("https://image.tmdb.org/t/p/w185"+movieData[0])
