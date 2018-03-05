@@ -19,7 +19,8 @@ import com.example.android.movieprojectpart1.utilities.MovieAdapter;
 public class MainActivity extends AppCompatActivity implements MovieAdapter.GridItemClickListener{
     private String[][] moviesInfo = new String[20][5];   //20 search results and 5 data points per movie
     private String[] movieInfo = new String [5];//test for 1 movie
-    private String moviddbUrl= "https://api.themoviedb.org/3/movie/popular?api_key="  + API.key +"&language=en-US&page=1";
+    private String moviddbUrl= "https://api.themoviedb.org/3/movie/popular?api_key="  + API.key
+            +"&language=en-US   &page=1";
     private TextView errorMessage;
     private String[] moviePosterUrls = new String[20];
     private RecyclerView mRecyclerView;
