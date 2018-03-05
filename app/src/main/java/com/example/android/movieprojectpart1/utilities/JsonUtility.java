@@ -35,7 +35,7 @@ public class JsonUtility {
     }
     public static String[][] formatJson(String rawJSON) throws JSONException{
         String mRawJSON = rawJSON;
-        String formattedJson[][]= new String[20][5];
+        String formattedJson[][]= new String[20][6];
         try{
             JSONObject movieJson = new JSONObject(mRawJSON);
             JSONArray movieArray = movieJson.getJSONArray("results");
@@ -46,13 +46,35 @@ public class JsonUtility {
                 formattedJson[i][2] = aMovie.getString("release_date");
                 formattedJson[i][3] = ""+aMovie.getDouble("vote_average");
                 formattedJson[i][4] = aMovie.getString("overview");
+                formattedJson[i][5] = ""+aMovie.getString("id");
             }
             Log.d("json",formattedJson[0][0]);
             Log.d("json",formattedJson[0][1]);
             Log.d("json",formattedJson[0][2]);
             Log.d("json",formattedJson[0][3]);
             Log.d("json",formattedJson[0][4]);
+            Log.d("json",formattedJson[0][5]);
             return formattedJson;
+        }catch(Exception e){
+            e.printStackTrace(); return null;
+        }
+
+    }
+    public static String[] formatDetailJson(String rawJSON) throws JSONException{
+        String mRawJSON = rawJSON;
+        String formattedJsonTrailers[]= new String[10];
+        try{
+            JSONObject movieJson = new JSONObject(mRawJSON);
+            JSONObject videosJson = movieJson.getJSONObject("videos");
+            JSONArray videoResultsArray = videosJson.getJSONArray("results");
+            for(int i=0; i< videoResultsArray.length();i++){ //loop through all 20 movies in json data
+                JSONObject aMovie = videoResultsArray.getJSONObject(i);
+                if(aMovie.getString("type").equals("Trailer"))  //don't get the url keys for Teasers or DVDs
+                    formattedJsonTrailers[i] = aMovie.getString("key");
+                else formattedJsonTrailers[i] = "";
+            }
+            Log.d("trailer key ",formattedJsonTrailers[0]);
+            return formattedJsonTrailers;
         }catch(Exception e){
             e.printStackTrace(); return null;
         }

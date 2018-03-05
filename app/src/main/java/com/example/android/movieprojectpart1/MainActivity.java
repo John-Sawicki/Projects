@@ -17,8 +17,8 @@ import com.example.android.movieprojectpart1.utilities.JsonUtility;
 import com.example.android.movieprojectpart1.utilities.MovieAdapter;
 
 public class MainActivity extends AppCompatActivity implements MovieAdapter.GridItemClickListener{
-    private String[][] moviesInfo = new String[20][5];   //20 search results and 5 data points per movie
-    private String[] movieInfo = new String [5];//test for 1 movie
+    private String[][] moviesInfo = new String[20][6];   //20 search results and 6 data points per movie
+    private String[] movieInfo = new String [6];//test for 1 movie
     private String moviddbUrl= "https://api.themoviedb.org/3/movie/popular?api_key="  + API.key
             +"&language=en-US   &page=1";
     private TextView errorMessage;
@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
     @Override
     public void onGridItemClick(int index) {
         Log.d("listener", ""+index);
-        for(int i=0; i<5;i++){
+        for(int i=0; i<6;i++){
             movieInfo[i] = moviesInfo[index][i];    //transfer movie data based on the index clicked
         }
         Intent intent = new Intent(MainActivity.this, DetailActivity.class);
