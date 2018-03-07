@@ -60,7 +60,7 @@ public class JsonUtility {
         }
 
     }
-    public static String[] formatDetailJson(String rawJSON) throws JSONException{
+    public static String[] formatDetailTrailerJson(String rawJSON) throws JSONException{
         String mRawJSON = rawJSON;
         String formattedJsonTrailers[]= new String[10];
         try{
@@ -69,15 +69,33 @@ public class JsonUtility {
             JSONArray videoResultsArray = videosJson.getJSONArray("results");
             for(int i=0; i< videoResultsArray.length();i++){ //loop through all 20 movies in json data
                 JSONObject aMovie = videoResultsArray.getJSONObject(i);
-                if(aMovie.getString("type").equals("Trailer"))  //don't get the url keys for Teasers or DVDs
+                //Log.d("trailer before if",aMovie.getString("type") );
+                if(aMovie.getString("type").equals("Trailer")) {  //don't get the url keys for Teasers or DVDs
                     formattedJsonTrailers[i] = aMovie.getString("key");
-                else formattedJsonTrailers[i] = "";
+                    Log.d("trailer key", formattedJsonTrailers[i]);
+                }else formattedJsonTrailers[i] = "noTrailer";
             }
-            Log.d("trailer key ",formattedJsonTrailers[0]);
             return formattedJsonTrailers;
         }catch(Exception e){
             e.printStackTrace(); return null;
         }
-
+    }
+    public static String[][] formatDetailReviewJson(String rawJSON) throws JSONException{
+        String mRawJSON = rawJSON;
+        String formattedJsonTrailers[][]= new String[10][2];
+        try{
+            JSONObject movieJson = new JSONObject(mRawJSON);
+            JSONObject videosJson = movieJson.getJSONObject("reviews");
+            JSONArray videoResultsArray = videosJson.getJSONArray("results");
+            for(int i=0; i< videoResultsArray.length();i++){ //loop through all 20 movies in json data
+                JSONObject aMovie = videoResultsArray.getJSONObject(i);
+                //Log.d("trailer before if",aMovie.getString("type") );
+                formattedJsonTrailers[i][0] = aMovie.getString("author");
+                formattedJsonTrailers[i][1] = aMovie.getString("content");
+            }
+            return formattedJsonTrailers;
+        }catch(Exception e){
+            e.printStackTrace(); return null;
+        }
     }
 }

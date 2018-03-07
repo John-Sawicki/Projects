@@ -1,0 +1,5 @@
+<resources>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="activity_title">16sp</dimen>
+    <dimen name="body_text">12sp</dimen>
+</resources>

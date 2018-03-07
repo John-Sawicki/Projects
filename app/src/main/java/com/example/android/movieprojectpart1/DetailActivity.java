@@ -1,23 +1,37 @@
 package com.example.android.movieprojectpart1;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.movieprojectpart1.utilities.API;
 import com.example.android.movieprojectpart1.utilities.JsonUtility;
+import com.example.android.movieprojectpart1.utilities.ReviewAdapter;
+import com.example.android.movieprojectpart1.utilities.TrailerAdapter;
 import com.squareup.picasso.Picasso;
 
-public class DetailActivity extends AppCompatActivity {
+import java.util.ArrayList;
+
+public class DetailActivity extends AppCompatActivity implements TrailerAdapter.TAOnClickHandler{
     private TextView titleText, releaseDateText, userRatingText, overviewText;
     private ImageView moviePosterImage;
-    private String[] movieData;
+    private String[] movieData, posterKeyArray;
+    private String [][] movieReviewArray;
     private String movieId = ""+157336;
-    private String movieDetailUrl;
+    private String movieDetailUrl="https://www.youtube.com/watch?v=";   //base url with no key
+    private ReviewAdapter mReviewAdapter;
+    private TrailerAdapter mTrailerAdapter;
+    private RecyclerView mTrailerRV, mReviewerRV;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +42,15 @@ public class DetailActivity extends AppCompatActivity {
         userRatingText = findViewById(R.id.movieVote);
         overviewText = findViewById(R.id.movieOverview);
 
+        mTrailerRV = findViewById(R.id.trailer_recycler_view);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager
+                (this,LinearLayoutManager.VERTICAL, false );
+       //mReviewAdapter = new ReviewAdapter(this);
+        //mReviewerRV.setAdapter(mReviewAdapter);
+        mTrailerAdapter = new TrailerAdapter(this);
+        mTrailerRV.setLayoutManager(layoutManager);
+        mTrailerRV.setAdapter(mTrailerAdapter);
         Intent intent = getIntent();
         if(intent.hasExtra("detail data")){   //if(intent.hasExtra("detail data")==true     before lint
             movieData= intent.getStringArrayExtra("detail data");
@@ -41,19 +64,71 @@ public class DetailActivity extends AppCompatActivity {
             movieId = movieData[5]; //use the movie id to create a new url to get trailers
             Log.d("movieId",movieId );
             movieDetailUrl = "https://api.themoviedb.org/3/movie/"+movieId+"?api_key="
-                    +API.key +"&append_to_response=videos";
+                    +API.key +"&append_to_response=videos,reviews";
             Log.d("detail movie", movieDetailUrl);
-            new GetDetailMovieInfoTask().execute(movieDetailUrl);
+            //new GetDetailTrailerInfoTask().execute(movieDetailUrl);
+
         }
     }
-    public class GetDetailMovieInfoTask extends AsyncTask<String, Void, String[]> {
+
+    @Override
+    public void onClick(String trailerName) {
+        Context context = this;
+        Toast.makeText(context, trailerName, Toast.LENGTH_SHORT).show();
+    }
+
+    public class GetDetailTrailerInfoTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... strings) {    //pass in url   return 2darray of parsed json
+            String[] parsedJson;
+            try{
+                String jsonStringFromWeb = JsonUtility.getResponseFromSite(strings[0]);
+                //Log.d("json raw", jsonStringFromWeb);
+               // parsedJson = JsonUtility.formatDetailTrailerJson(jsonStringFromWeb);
+                return jsonStringFromWeb;
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+            return null;
+        }
+        @Override
+        protected void onPostExecute(String jsonRawString) {
+            String[] youtubeKeyArray, nonNonReviewName;
+            String[][] reviewArray;
+            //ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, listItems);
+
+            //mListView.setAdapter(adapter);
+            try{
+                youtubeKeyArray = JsonUtility.formatDetailTrailerJson(jsonRawString);
+                posterKeyArray = youtubeKeyArray;
+
+                reviewArray = JsonUtility.formatDetailReviewJson(jsonRawString);
+                movieReviewArray = reviewArray;
+                for(int i=0; i<10;i++){
+                    if(movieReviewArray[i][0]!=null){   //avoid null pointer if there are less than 10 reviews from json, starts at 0 and increase till null continuously
+                        //reviewerAdapter.add(movieReviewArray[i][0]);    //add reviewer name to the array
+
+                    }
+                }
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+
+            Log.d("detail post", posterKeyArray[1]);
+            //TODO create an adapter based on the number of trailers
+            //TODO create an adapter based on the number of reviews
+        }
+    }
+
+    /*
+    public class GetDetailTrailerInfoTask extends AsyncTask<String, Void, String[]> {
         @Override
         protected String[] doInBackground(String... strings) {    //pass in url   return 2darray of parsed json
             String[] parsedJson;
             try{
                 String jsonStringFromWeb = JsonUtility.getResponseFromSite(strings[0]);
                 Log.d("json raw", jsonStringFromWeb);
-                parsedJson = JsonUtility.formatDetailJson(jsonStringFromWeb);
+                parsedJson = JsonUtility.formatDetailTrailerJson(jsonStringFromWeb);
                 return parsedJson;
             }catch(Exception e){
                 e.printStackTrace();
@@ -61,8 +136,12 @@ public class DetailActivity extends AppCompatActivity {
             return null;
         }
         @Override
-        protected void onPostExecute(String[] strings) {
-
+        protected void onPostExecute(String[] jsonPosterKeyArray) {
+            posterKeyArray = jsonPosterKeyArray;
+            Log.d("detail post", posterKeyArray[1]);
+            //TODO create an adapter based on the number of trailers
         }
     }
+    */
+
 }

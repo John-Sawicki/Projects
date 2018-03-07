@@ -28,7 +28,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
     @Override
     public MovieAdapterViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         Context context = viewGroup.getContext();
-        int posterLayout = R.layout.poster_list_item;
+        int posterLayout =  R.layout.poster_list_item;
         LayoutInflater inflater = LayoutInflater.from(context);
         boolean shouldAttach = false;
         View view = inflater.inflate(posterLayout, viewGroup, shouldAttach);

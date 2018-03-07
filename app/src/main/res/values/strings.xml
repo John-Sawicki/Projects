@@ -5,4 +5,5 @@
     <string name="error_message">There was an error with your network connection. Please try search again when you have a connection to the internet.</string>
     <string name="release_date">Release Date</string>
     <string name="user_rating">User Rating</string>
+    <string name="title_activity_review">ReviewActivity</string>
 </resources>
