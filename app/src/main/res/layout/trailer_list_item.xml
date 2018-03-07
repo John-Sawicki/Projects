@@ -7,18 +7,21 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:id="@+id/trailer_list_item">
         <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:layout_margin="8dp"
-            android:src="@drawable/you_tube_icon"/>
+            android:src="@drawable/you_tube_icon"
+            android:id="@+id/you_tube_image"/>
         <TextView
             android:id="@+id/trailer_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="@dimen/body_text"
-            android:text="Movie Trailer"
+            android:layout_gravity="center_vertical"
+            android:text="empty"
             android:layout_margin="8dp"/>
     </LinearLayout>
     <View
@@ -26,5 +29,6 @@
         android:layout_height="1dp"
         android:background="@color/colorMiddleBlue"
         android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp" />
+        android:layout_marginRight="8dp"
+        android:id="@+id/blue_line"/>
 </LinearLayout>

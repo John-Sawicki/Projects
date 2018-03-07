@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,7 +30,7 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
     private String[] movieData, posterKeyArray;
     private String [][] movieReviewArray;
     private String movieId = ""+157336;
-    private String movieDetailUrl="https://www.youtube.com/watch?v=";   //base url with no key
+    private String movieDetailUrl, youTubeUrl="https://www.youtube.com/watch?v=";   //base url with no key
     private ReviewAdapter mReviewAdapter;
     private TrailerAdapter mTrailerAdapter;
     private RecyclerView mTrailerRV, mReviewerRV;
@@ -52,6 +53,7 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         mTrailerAdapter = new TrailerAdapter(this);
         mTrailerRV.setLayoutManager(layoutManager);
         mTrailerRV.setAdapter(mTrailerAdapter);
+
         Intent intent = getIntent();
         if(intent.hasExtra("detail data")){   //if(intent.hasExtra("detail data")==true     before lint
             movieData= intent.getStringArrayExtra("detail data");
@@ -70,15 +72,18 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
             new GetDetailTrailerInfoTask().execute(movieDetailUrl);
 
         }
+
+
+
     }
 
     @Override
     public void onClick(String trailerName) {
         Context context = this;
         //Toast.makeText(context, trailerName, Toast.LENGTH_SHORT).show();
-        Log.d("trailer url clicked",trailerName);
-        Intent youTubeIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(movieDetailUrl+trailerName));
-        context.startActivity(youTubeIntent);
+        Log.d("trailer url clicked",movieDetailUrl+trailerName);
+        Intent youTubeIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(youTubeUrl+trailerName));
+        startActivity(youTubeIntent);
     }
 
     public class GetDetailTrailerInfoTask extends AsyncTask<String, Void, String> {

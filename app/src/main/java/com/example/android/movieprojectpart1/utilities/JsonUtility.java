@@ -75,7 +75,7 @@ public class JsonUtility {
                 if(aMovie.getString("type").equals("Trailer")) {  //don't get the url keys for Teasers or DVDs
                     formattedJsonTrailers[i] = aMovie.getString("key");
                     Log.d("trailer key", formattedJsonTrailers[i]);
-                }else formattedJsonTrailers[i] = "noTrailer";
+                }else formattedJsonTrailers[i] = "empty";
             }
             return formattedJsonTrailers;
         }catch(Exception e){
