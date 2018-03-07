@@ -12,7 +12,7 @@ import com.example.android.movieprojectpart1.R;
 import java.util.List;
 
 public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerAdapterVH> {
-    private String[] mTrailerUrlKeys ={"asdf","jkl;"};
+    private String[] mTrailerUrlKeys ={"empty","empty","empty","empty","empty","empty","empty","empty","empty","empty"};
 
     private final TAOnClickHandler mTAOnClickHandler;
     public interface TAOnClickHandler{
@@ -47,8 +47,9 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerA
     @Override
     public void onBindViewHolder(TrailerAdapterVH holder, int position) {
         String trailerUrlKey = mTrailerUrlKeys[position];
-        if(trailerUrlKey !="0"){
+        if(trailerUrlKey !="0"){    //set to "empty" after verifying url keys
             holder.mTrailerTextView.setText(trailerUrlKey);
+            //holder.mTrailerTextView.setText("Trailer "+position); //array will show Trailer 1, Trailer 2,
         }
         //the trailer array is initialized to all "0" and valid trailer keys replaces the 0. If there are 3 valid trailer keys, only 3
         // trailer will be shown and all three will have a valid value to go to youTube

@@ -64,6 +64,8 @@ public class JsonUtility {
         String mRawJSON = rawJSON;
         String formattedJsonTrailers[]= new String[10];
         try{
+            for(int i = 0; i<10; i++){
+                formattedJsonTrailers[i]= "empty";  }   //start array with all value empty to prevent null point if there are less than 10 trailers
             JSONObject movieJson = new JSONObject(mRawJSON);
             JSONObject videosJson = movieJson.getJSONObject("videos");
             JSONArray videoResultsArray = videosJson.getJSONArray("results");
@@ -84,6 +86,9 @@ public class JsonUtility {
         String mRawJSON = rawJSON;
         String formattedJsonTrailers[][]= new String[10][2];
         try{
+            for(int i = 0; i<10; i++){
+                formattedJsonTrailers[i][0]= "empty"; formattedJsonTrailers[i][1]= "empty"; //fill array with a value and make view 'gone' in the adapter
+            }
             JSONObject movieJson = new JSONObject(mRawJSON);
             JSONObject videosJson = movieJson.getJSONObject("reviews");
             JSONArray videoResultsArray = videosJson.getJSONArray("results");
