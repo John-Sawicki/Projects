@@ -25,6 +25,12 @@
                 android:textSize="24sp"
                 android:textColor="@color/white"
                 android:background="@color/colorBottomBlue"/>
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/star_icon"
+                                    android:layout_toRightOf="@+id/movieTitle"
+                                    android:background="@drawable/ic_launcher_background"/>
 
             <TextView
                 android:layout_width="wrap_content"

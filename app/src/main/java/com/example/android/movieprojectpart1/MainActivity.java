@@ -113,9 +113,11 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
             Log.d("menu", "rating menu clicked");
             new GetMovieInfoTask().execute(moviddbUrl);
         }
+        if(menuItemClicked==R.id.favorites){
+            //TODO update grid with values from
+        }
         return true;
     }
-
     @Override
     public void onGridItemClick(int index) {
         Log.d("listener", ""+index);

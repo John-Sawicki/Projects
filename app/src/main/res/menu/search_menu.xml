@@ -4,4 +4,6 @@
           android:title="@string/search_by_popularity"/>
     <item android:id="@+id/menu_rating"
           android:title="@string/search_by_rating"/>
+    <item android:id="@+id/favorites"
+          android:title="@string/search_by_title"/>
 </menu>
