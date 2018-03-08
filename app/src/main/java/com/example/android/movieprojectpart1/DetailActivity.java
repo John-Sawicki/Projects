@@ -41,6 +41,8 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
     private TrailerAdapter mTrailerAdapter;
     private RecyclerView mTrailerRV, mReviewerRV;
     private Spinner mSpinner;
+    private boolean spinnerUpdated = false;
+    ArrayAdapter aa;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,17 +102,27 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Log.d("spinner item url",reviewerUrl[i] );
-               // Log.d("reviewer url clicked",reviewerUrl[i]);
-                if(reviewerUrl[i]!="0"){
-                   Intent reviewerIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(reviewerUrl[i]));
-                    startActivity(reviewerIntent);
+                if(spinnerUpdated){
+                    Log.d("spinner item url",reviewerUrl[i] );
+                    // Log.d("reviewer url clicked",reviewerUrl[i]);
+                    if(reviewerUrl[i]!="0"){
+                        Intent reviewerIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(reviewerUrl[i]));
+                        startActivity(reviewerIntent);
+                    }
                 }
             }
             @Override public void onNothingSelected(AdapterView<?> adapterView) {}
         });
 
-        ArrayAdapter aa = new ArrayAdapter(this,android.R.layout.simple_spinner_item,reviewerName);
+        //ArrayAdapter aa = new ArrayAdapter(this,android.R.layout.simple_spinner_item,reviewerName);
+         aa = new ArrayAdapter(this,android.R.layout.simple_spinner_item);
+        //aa.clear();
+       /* aa.add("some dude");
+        for(int i =0; i<reviewerName.length;i++){
+            Log.d("spinner adapter", reviewerName[i]);
+            if(reviewerName[i]!="0")  aa.add(reviewerName[i]);
+        }
+        */
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //Setting the ArrayAdapter data on the Spinner
         mSpinner.setAdapter(aa);
@@ -160,6 +172,11 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
                 }
                 Log.d("onPost author 1d",reviewerName[1]);
                 Log.d("onPost url 1d",reviewerUrl[1] );
+                for(int i =0; i<reviewerName.length;i++){
+                    Log.d("spinner adapter", reviewerName[i]);
+                    if(reviewerName[i]!="0")  aa.add(reviewerName[i]);
+                }
+                spinnerUpdated=true;
             }catch(Exception e){
                 e.printStackTrace();
             }

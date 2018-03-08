@@ -74,15 +74,16 @@
                 android:minLines="2"
                 android:paddingLeft="15dp"
                 android:textSize="18sp"
-                android:paddingTop="10dp"
                 android:textStyle="bold"
+                android:paddingTop="10dp"
                 android:layout_below="@+id/movieVote"/>
+
             <Spinner
                 android:id="@+id/reviewer_spinner"
-                android:layout_width="wrap_content"
+                android:paddingLeft="15dp"
+                android:layout_width="140dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/read_reviews"
-                android:paddingLeft="15dp"
                 android:paddingTop="10dp">
             </Spinner>
                                         <ImageView
@@ -92,7 +93,7 @@
                                             android:layout_toRightOf="@+id/movieReleased"
                                             android:layout_below="@+id/movieTitle"
                                             android:padding="8dp"
-                                            android:layout_marginLeft="40dp"
+                                            android:layout_marginLeft="80dp"
                                             android:contentDescription="movie poster"/>
             <TextView
                 android:layout_width="match_parent"
