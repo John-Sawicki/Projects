@@ -10,7 +10,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -18,6 +20,7 @@ import android.widget.Toast;
 
 import com.example.android.movieprojectpart1.utilities.API;
 import com.example.android.movieprojectpart1.utilities.JsonUtility;
+import com.example.android.movieprojectpart1.utilities.ReviewActivity;
 import com.example.android.movieprojectpart1.utilities.ReviewAdapter;
 import com.example.android.movieprojectpart1.utilities.TrailerAdapter;
 import com.squareup.picasso.Picasso;
@@ -27,13 +30,14 @@ import java.util.ArrayList;
 public class DetailActivity extends AppCompatActivity implements TrailerAdapter.TAOnClickHandler{
     private TextView titleText, releaseDateText, userRatingText, overviewText;
     private ImageView moviePosterImage;
-    private String[] movieData, posterKeyArray;
+    private String[] movieData, posterKeyArray, reviewerName, reviewerUrl;
     private String [][] movieReviewArray;
     private String movieId = ""+157336;
     private String movieDetailUrl, youTubeUrl="https://www.youtube.com/watch?v=";   //base url with no key
     private ReviewAdapter mReviewAdapter;
     private TrailerAdapter mTrailerAdapter;
     private RecyclerView mTrailerRV, mReviewerRV;
+    private Button reviewerButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,9 +47,8 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         releaseDateText = findViewById(R.id.movieReleased);
         userRatingText = findViewById(R.id.movieVote);
         overviewText = findViewById(R.id.movieOverview);
-
         mTrailerRV = findViewById(R.id.trailer_recycler_view);
-
+        reviewerButton = findViewById(R.id.read_reviews);
         LinearLayoutManager layoutManager = new LinearLayoutManager
                 (this,LinearLayoutManager.VERTICAL, false );
        //mReviewAdapter = new ReviewAdapter(this);
@@ -70,17 +73,24 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
                     +API.key +"&append_to_response=videos,reviews";
             Log.d("detail movie", movieDetailUrl);
             new GetDetailTrailerInfoTask().execute(movieDetailUrl);
-
+            reviewerButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent reviewerIntent =new Intent(DetailActivity.this, ReviewActivity.class);
+                    for(int i=0; i<movieReviewArray.length; i++){//intent only works with 2d arrays
+                        reviewerName[i]=movieReviewArray[i][0];
+                        reviewerUrl[i]=movieReviewArray[i][1];
+                    }
+                    reviewerIntent.putExtra("reviewer info",reviewerName);
+                    reviewerIntent.putExtra("review url",reviewerUrl );
+                    reviewerIntent.putExtra("movie title",movieData[1] );
+                    startActivity(reviewerIntent);
+                }
+            });
         }
-
-
-
     }
-
     @Override
     public void onClick(String trailerName) {
-        Context context = this;
-        //Toast.makeText(context, trailerName, Toast.LENGTH_SHORT).show();
         Log.d("trailer url clicked",movieDetailUrl+trailerName);
         Intent youTubeIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(youTubeUrl+trailerName));
         startActivity(youTubeIntent);
@@ -110,11 +120,7 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
                 mTrailerAdapter.setTrailerUrlKeys(posterKeyArray);
                 reviewArray = JsonUtility.formatDetailReviewJson(jsonRawString);
                 movieReviewArray = reviewArray;
-                for(int i=0; i<10;i++){
-                    if(movieReviewArray[i][0]!=null){   //avoid null pointer if there are less than 10 reviews from json, starts at 0 and increase till null continuously
-                        //reviewerAdapter.add(movieReviewArray[i][0]);    //add reviewer name to the array
-                    }
-                }
+
             }catch(Exception e){
                 e.printStackTrace();
             }

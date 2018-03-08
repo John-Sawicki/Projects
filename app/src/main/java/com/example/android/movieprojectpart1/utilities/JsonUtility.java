@@ -96,7 +96,7 @@ public class JsonUtility {
                 JSONObject aMovie = videoResultsArray.getJSONObject(i);
                 //Log.d("trailer before if",aMovie.getString("type") );
                 formattedJsonTrailers[i][0] = aMovie.getString("author");
-                formattedJsonTrailers[i][1] = aMovie.getString("content");
+                formattedJsonTrailers[i][1] = aMovie.getString("url");
             }
             return formattedJsonTrailers;
         }catch(Exception e){
