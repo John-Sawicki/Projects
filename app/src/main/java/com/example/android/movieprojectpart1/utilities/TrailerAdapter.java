@@ -54,7 +54,7 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerA
     @Override
     public void onBindViewHolder(TrailerAdapterVH holder, int position) {
         String trailerUrlKey = mTrailerUrlKeys[position];
-        Log.d("adapter key", trailerUrlKey);
+        //Log.d("adapter key", trailerUrlKey);
         //holder.mTrailerTextView.setText("Movie Trailer #"+(position+1));    //0 index
 
         if(trailerUrlKey !="empty"){    //set to "empty" after verifying url keys

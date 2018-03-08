@@ -11,10 +11,12 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ScrollView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,14 +32,14 @@ import java.util.ArrayList;
 public class DetailActivity extends AppCompatActivity implements TrailerAdapter.TAOnClickHandler{
     private TextView titleText, releaseDateText, userRatingText, overviewText;
     private ImageView moviePosterImage;
-    private String[] movieData, posterKeyArray, reviewerName, reviewerUrl;
-    private String [][] movieReviewArray;
+     String[] movieData, posterKeyArray, reviewerName = new String[10], reviewerUrl= new String[10];
+    private String [][] movieReviewArray = new String[10][2];
     private String movieId = ""+157336;
     private String movieDetailUrl, youTubeUrl="https://www.youtube.com/watch?v=";   //base url with no key
     private ReviewAdapter mReviewAdapter;
     private TrailerAdapter mTrailerAdapter;
     private RecyclerView mTrailerRV, mReviewerRV;
-    private Button reviewerButton;
+    private Spinner mSpinner;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +50,6 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         userRatingText = findViewById(R.id.movieVote);
         overviewText = findViewById(R.id.movieOverview);
         mTrailerRV = findViewById(R.id.trailer_recycler_view);
-        reviewerButton = findViewById(R.id.read_reviews);
         LinearLayoutManager layoutManager = new LinearLayoutManager
                 (this,LinearLayoutManager.VERTICAL, false );
        //mReviewAdapter = new ReviewAdapter(this);
@@ -56,7 +57,10 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         mTrailerAdapter = new TrailerAdapter(this);
         mTrailerRV.setLayoutManager(layoutManager);
         mTrailerRV.setAdapter(mTrailerAdapter);
-
+        for(int i = 0; i<10; i++){
+            movieReviewArray[i][0]= "0"; movieReviewArray[i][1]= "0";
+            reviewerName[i]="0"; reviewerUrl[i]="0";
+        }
         Intent intent = getIntent();
         if(intent.hasExtra("detail data")){   //if(intent.hasExtra("detail data")==true     before lint
             movieData= intent.getStringArrayExtra("detail data");
@@ -73,21 +77,43 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
                     +API.key +"&append_to_response=videos,reviews";
             Log.d("detail movie", movieDetailUrl);
             new GetDetailTrailerInfoTask().execute(movieDetailUrl);
+            Log.d("review author", movieReviewArray[1][0]);
+            Log.d("review", movieReviewArray[9][1]);
+
+            /*
             reviewerButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent reviewerIntent =new Intent(DetailActivity.this, ReviewActivity.class);
-                    for(int i=0; i<movieReviewArray.length; i++){//intent only works with 2d arrays
-                        reviewerName[i]=movieReviewArray[i][0];
-                        reviewerUrl[i]=movieReviewArray[i][1];
-                    }
+
                     reviewerIntent.putExtra("reviewer info",reviewerName);
                     reviewerIntent.putExtra("review url",reviewerUrl );
                     reviewerIntent.putExtra("movie title",movieData[1] );
                     startActivity(reviewerIntent);
                 }
             });
+            */
         }
+
+        mSpinner= findViewById(R.id.reviewer_spinner);
+        mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.d("spinner author ",movieReviewArray[1][0] );
+                Log.d("spinner url",movieReviewArray[1][1] );
+               // Log.d("reviewer url clicked",reviewerUrl[i]);
+                if(reviewerUrl!=null){
+                   //Intent reviewerIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(reviewerUrl[i]));
+                    //startActivity(reviewerIntent);
+                }
+            }
+            @Override public void onNothingSelected(AdapterView<?> adapterView) {}
+        });
+        ArrayAdapter aa = new ArrayAdapter(this,android.R.layout.simple_spinner_item,reviewerName);
+        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //Setting the ArrayAdapter data on the Spinner
+        mSpinner.setAdapter(aa);
+
     }
     @Override
     public void onClick(String trailerName) {
@@ -119,15 +145,21 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
                 posterKeyArray = youtubeKeyArray;
                 mTrailerAdapter.setTrailerUrlKeys(posterKeyArray);
                 reviewArray = JsonUtility.formatDetailReviewJson(jsonRawString);
+                Log.d("reviewArray",reviewArray[1][0] );
                 movieReviewArray = reviewArray;
+                Log.d("onPost author 2d",movieReviewArray[1][0] );
+                Log.d("onPost url 2d",movieReviewArray[1][1] );
 
+                for(int i=0; i<10; i++){//intent only works with 2d arrays
+                reviewerName[i]=movieReviewArray[i][0]; //values shown in the spinner
+                reviewerUrl[i]=movieReviewArray[i][1];  //values for the url
+                }
+                Log.d("onPost author 1d",reviewerName[1]);
+                Log.d("onPost url 1d",reviewerUrl[1] );
             }catch(Exception e){
                 e.printStackTrace();
             }
 
-            Log.d("detail post", posterKeyArray[1]);
-            //TODO create an adapter based on the number of trailers
-            //TODO create an adapter based on the number of reviews
         }
     }
 

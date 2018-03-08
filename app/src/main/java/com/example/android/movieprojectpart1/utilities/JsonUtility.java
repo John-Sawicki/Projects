@@ -82,22 +82,24 @@ public class JsonUtility {
             e.printStackTrace(); return null;
         }
     }
-    public static String[][] formatDetailReviewJson(String rawJSON) throws JSONException{
-        String mRawJSON = rawJSON;
+    public static String[][] formatDetailReviewJson(String rawReviewJSON) throws JSONException{
+        String mRawReviewJSON = rawReviewJSON;
         String formattedJsonTrailers[][]= new String[10][2];
         try{
             for(int i = 0; i<10; i++){
-                formattedJsonTrailers[i][0]= "empty"; formattedJsonTrailers[i][1]= "empty"; //fill array with a value and make view 'gone' in the adapter
+                formattedJsonTrailers[i][0]= "0"; formattedJsonTrailers[i][1]= "0"; //fill array with a value and make view 'gone' in the adapter
             }
-            JSONObject movieJson = new JSONObject(mRawJSON);
-            JSONObject videosJson = movieJson.getJSONObject("reviews");
-            JSONArray videoResultsArray = videosJson.getJSONArray("results");
-            for(int i=0; i< videoResultsArray.length();i++){ //loop through all 20 movies in json data
-                JSONObject aMovie = videoResultsArray.getJSONObject(i);
+            JSONObject movieReviewJson = new JSONObject(mRawReviewJSON);
+            JSONObject videosJson = movieReviewJson.getJSONObject("reviews");
+            JSONArray reviewsResultsArray = videosJson.getJSONArray("results");
+            for(int i=0; i< reviewsResultsArray.length();i++){ //loop through all 20 movies in json data
+                JSONObject aReview = reviewsResultsArray.getJSONObject(i);
                 //Log.d("trailer before if",aMovie.getString("type") );
-                formattedJsonTrailers[i][0] = aMovie.getString("author");
-                formattedJsonTrailers[i][1] = aMovie.getString("url");
+                formattedJsonTrailers[i][0] = aReview.getString("author");
+                formattedJsonTrailers[i][1] = aReview.getString("url");
+
             }
+            Log.d("format detail 1",formattedJsonTrailers[1][0] );
             return formattedJsonTrailers;
         }catch(Exception e){
             e.printStackTrace(); return null;
