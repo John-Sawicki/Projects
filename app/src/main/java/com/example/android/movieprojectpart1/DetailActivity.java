@@ -33,6 +33,7 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
     private TextView titleText, releaseDateText, userRatingText, overviewText;
     private ImageView moviePosterImage;
      String[] movieData, posterKeyArray, reviewerName = new String[10], reviewerUrl= new String[10];
+     String[] validAuthorArray;
     private String [][] movieReviewArray = new String[10][2];
     private String movieId = ""+157336;
     private String movieDetailUrl, youTubeUrl="https://www.youtube.com/watch?v=";   //base url with no key
@@ -99,16 +100,16 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Log.d("spinner author ",movieReviewArray[1][0] );
-                Log.d("spinner url",movieReviewArray[1][1] );
+                Log.d("spinner item url",reviewerUrl[i] );
                // Log.d("reviewer url clicked",reviewerUrl[i]);
-                if(reviewerUrl!=null){
-                   //Intent reviewerIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(reviewerUrl[i]));
-                    //startActivity(reviewerIntent);
+                if(reviewerUrl[i]!="0"){
+                   Intent reviewerIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(reviewerUrl[i]));
+                    startActivity(reviewerIntent);
                 }
             }
             @Override public void onNothingSelected(AdapterView<?> adapterView) {}
         });
+
         ArrayAdapter aa = new ArrayAdapter(this,android.R.layout.simple_spinner_item,reviewerName);
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //Setting the ArrayAdapter data on the Spinner
@@ -153,6 +154,9 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
                 for(int i=0; i<10; i++){//intent only works with 2d arrays
                 reviewerName[i]=movieReviewArray[i][0]; //values shown in the spinner
                 reviewerUrl[i]=movieReviewArray[i][1];  //values for the url
+                    if(reviewerName[i]!="0"){
+                        validAuthorArray =reviewerName;  Log.d("validAuthorArray", validAuthorArray[i]);
+                    }
                 }
                 Log.d("onPost author 1d",reviewerName[1]);
                 Log.d("onPost url 1d",reviewerUrl[1] );

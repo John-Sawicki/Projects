@@ -34,7 +34,7 @@
                 android:text="@string/release_date"
                 android:id="@+id/releaseTitle"
                 android:layout_below="@+id/movieTitle"
-                android:paddingTop="60dp"
+                android:paddingTop="8dp"
                 android:paddingLeft="15dp"/>
             <TextView
                 android:layout_width="wrap_content"
@@ -69,13 +69,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/read_reviews"
-                android:text="Read Reviews"
+                android:text="Read Review \nfrom"
+                android:lines="2"
+                android:minLines="2"
                 android:paddingLeft="15dp"
                 android:textSize="18sp"
                 android:paddingTop="10dp"
                 android:textStyle="bold"
                 android:layout_below="@+id/movieVote"/>
-
             <Spinner
                 android:id="@+id/reviewer_spinner"
                 android:layout_width="wrap_content"
@@ -91,7 +92,7 @@
                                             android:layout_toRightOf="@+id/movieReleased"
                                             android:layout_below="@+id/movieTitle"
                                             android:padding="8dp"
-                                            android:layout_marginLeft="50dp"
+                                            android:layout_marginLeft="40dp"
                                             android:contentDescription="movie poster"/>
             <TextView
                 android:layout_width="match_parent"
