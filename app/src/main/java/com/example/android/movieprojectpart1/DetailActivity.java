@@ -1,7 +1,9 @@
 package com.example.android.movieprojectpart1;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +22,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.movieprojectpart1.sqliteData.FavoriteDbHelper;
+import com.example.android.movieprojectpart1.sqliteData.FavoriteMovieContract;
+import com.example.android.movieprojectpart1.sqliteData.FavoriteMovieContract.FavoriteMovieEntry;
 import com.example.android.movieprojectpart1.utilities.API;
 import com.example.android.movieprojectpart1.utilities.JsonUtility;
 import com.example.android.movieprojectpart1.utilities.ReviewActivity;
@@ -43,6 +48,7 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
     private Spinner mSpinner;
     private boolean spinnerUpdated = false;
     ArrayAdapter aa;
+    public SQLiteDatabase mDb;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,20 +88,6 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
             new GetDetailTrailerInfoTask().execute(movieDetailUrl);
             Log.d("review author", movieReviewArray[1][0]);
             Log.d("review", movieReviewArray[9][1]);
-
-            /*
-            reviewerButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent reviewerIntent =new Intent(DetailActivity.this, ReviewActivity.class);
-
-                    reviewerIntent.putExtra("reviewer info",reviewerName);
-                    reviewerIntent.putExtra("review url",reviewerUrl );
-                    reviewerIntent.putExtra("movie title",movieData[1] );
-                    startActivity(reviewerIntent);
-                }
-            });
-            */
         }
 
         mSpinner= findViewById(R.id.reviewer_spinner);
@@ -113,20 +105,25 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
             }
             @Override public void onNothingSelected(AdapterView<?> adapterView) {}
         });
-
-        //ArrayAdapter aa = new ArrayAdapter(this,android.R.layout.simple_spinner_item,reviewerName);
          aa = new ArrayAdapter(this,android.R.layout.simple_spinner_item);
-        //aa.clear();
-       /* aa.add("some dude");
-        for(int i =0; i<reviewerName.length;i++){
-            Log.d("spinner adapter", reviewerName[i]);
-            if(reviewerName[i]!="0")  aa.add(reviewerName[i]);
-        }
-        */
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //Setting the ArrayAdapter data on the Spinner
         mSpinner.setAdapter(aa);
-
+        FavoriteDbHelper dbHelper = new FavoriteDbHelper(this);
+        mDb = dbHelper.getWritableDatabase();
+    }
+    public void onClickAddFav(View view){   //when the favorite button is pressed, add detail info to the database
+        ContentValues cv = new ContentValues();
+        cv.put(FavoriteMovieEntry.POSTER_PATH, movieData[0]);
+        cv.put(FavoriteMovieEntry.ORIGINAL_TITLE, movieData[1]);
+        cv.put(FavoriteMovieEntry.RELEASE_DATE, movieData[2]);
+        cv.put(FavoriteMovieEntry.VOTE_AVERAGE, movieData[3]);
+        cv.put(FavoriteMovieEntry.OVERVIEW, movieData[4]);
+        cv.put(FavoriteMovieEntry.ID, movieData[5]);
+        Uri uri = getContentResolver().insert(FavoriteMovieEntry.CONTENT_URI, cv);
+        if(uri!=null){
+            Toast.makeText(getBaseContext(), uri.toString(), Toast.LENGTH_SHORT).show();
+        }
     }
     @Override
     public void onClick(String trailerName) {
@@ -134,15 +131,13 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         Intent youTubeIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(youTubeUrl+trailerName));
         startActivity(youTubeIntent);
     }
-
     public class GetDetailTrailerInfoTask extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... strings) {    //pass in url   return 2darray of parsed json
             String[] parsedJson;
             try{
                 String jsonStringFromWeb = JsonUtility.getResponseFromSite(strings[0]);
-                //Log.d("json raw", jsonStringFromWeb);
-               // parsedJson = JsonUtility.formatDetailTrailerJson(jsonStringFromWeb);
+
                 return jsonStringFromWeb;
             }catch(Exception e){
                 e.printStackTrace();
@@ -180,32 +175,6 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
             }catch(Exception e){
                 e.printStackTrace();
             }
-
         }
     }
-
-    /*
-    public class GetDetailTrailerInfoTask extends AsyncTask<String, Void, String[]> {
-        @Override
-        protected String[] doInBackground(String... strings) {    //pass in url   return 2darray of parsed json
-            String[] parsedJson;
-            try{
-                String jsonStringFromWeb = JsonUtility.getResponseFromSite(strings[0]);
-                Log.d("json raw", jsonStringFromWeb);
-                parsedJson = JsonUtility.formatDetailTrailerJson(jsonStringFromWeb);
-                return parsedJson;
-            }catch(Exception e){
-                e.printStackTrace();
-            }
-            return null;
-        }
-        @Override
-        protected void onPostExecute(String[] jsonPosterKeyArray) {
-            posterKeyArray = jsonPosterKeyArray;
-            Log.d("detail post", posterKeyArray[1]);
-            //TODO create an adapter based on the number of trailers
-        }
-    }
-    */
-
 }

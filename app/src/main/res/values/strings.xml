@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Movie Project Part 1</string>
+    <string name="app_name">Movie Project Part 2</string>
     <string name="search_by_popularity">Search by Popularity</string>
     <string name="search_by_rating">Search by Rating</string>
     <string name="error_message">There was an error with your network connection. Please try search again when you have a connection to the internet.</string>

@@ -1,6 +1,8 @@
 package com.example.android.movieprojectpart1;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,9 +14,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+
+import com.example.android.movieprojectpart1.sqliteData.FavoriteDbHelper;
+//import com.example.android.movieprojectpart1.sqliteData.FavoriteMovieContract;
+  import static com.example.android.movieprojectpart1.sqliteData.FavoriteMovieContract.FavoriteMovieEntry;
 import com.example.android.movieprojectpart1.utilities.API;
 import com.example.android.movieprojectpart1.utilities.JsonUtility;
 import com.example.android.movieprojectpart1.utilities.MovieAdapter;
+
+
 
 public class MainActivity extends AppCompatActivity implements MovieAdapter.GridItemClickListener{
     private String[][] moviesInfo = new String[20][6];   //20 search results and 6 data points per movie
@@ -25,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
     private String[] moviePosterUrls = new String[20];
     private RecyclerView mRecyclerView;
     private MovieAdapter mMovieAdapter;
+    public SQLiteDatabase mDb;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,16 +48,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
         //poster = findViewById(R.id.singlePosterImage); replaced image with recycler view
         errorMessage = findViewById(R.id.errorText);
         errorMessage.setVisibility(View.INVISIBLE);     //only shows if there is am error retrieving json data
-        /*
-        poster.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, DetailActivity.class);
-                intent.putExtra("detail data",moviesInfo);
-                startActivity(intent);
-            }
-        });
-         */
+        FavoriteDbHelper dbHelper = new FavoriteDbHelper(this);
+        mDb = dbHelper.getWritableDatabase();   //TODO add methods to add favorite movies and retrieve favorite movies
     }
     public class GetMovieInfoTask extends AsyncTask<String, Void, String[][]>{
         @Override
@@ -72,20 +73,11 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
                 moviesInfo = strings; //2d array with detail info for all 20 movies
                 for(int i = 0;i<20; i++){
                     moviePosterUrls[i]= imageBaseURL+moviesInfo[i][0];   //movie url suffix is in column 0
-                    //Log.d("onPost", i+" "+moviePosterUrls[i]);
                 }
                 mMovieAdapter.setUrlData(moviePosterUrls);
                 Log.d("onPost", moviesInfo[0][0]);  //copy the async result to the variable on the UI thread to send to detail activity
                 Log.d("onPost", imageBaseURL+moviesInfo[0][0]);
-                /*
-                fullURL = imageBaseURL+moviesInfo[0][0]; Log.d("onPost", fullURL);
-                //Picasso.with(getApplicationContext()).load(imageBaseURL+movieInfo[0]).into(poster);
-                for(int i=0; i<20;i++){
-                    Picasso.with(getApplicationContext())
-                            .load(imageBaseURL+moviesInfo[0][0])
-                            .into(poster);
-                }
-                */
+
                 mRecyclerView.setVisibility(View.VISIBLE);
                 errorMessage.setVisibility(View.INVISIBLE);
             }else{
@@ -129,4 +121,9 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
         startActivity(intent);
 
     }
+    private Cursor getAllFavorites(){
+        return mDb.query(FavoriteMovieEntry.TABLE_NAME,
+                null,null,null, null, null,null);
+    }
+
 }

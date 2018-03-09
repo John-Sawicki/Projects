@@ -20,18 +20,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:padding="12dp"
+                android:padding="8dp"
                 android:text="movie title"
                 android:textSize="24sp"
                 android:textColor="@color/white"
                 android:background="@color/colorBottomBlue"/>
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:id="@+id/star_icon"
-                                    android:layout_toRightOf="@+id/movieTitle"
-                                    android:background="@drawable/ic_launcher_background"/>
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -51,7 +44,6 @@
                 android:layout_below="@+id/releaseTitle"
                 android:paddingTop="10dp"
                 android:paddingLeft="15dp"/>
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -71,6 +63,15 @@
                 android:layout_below="@+id/voteTitle"
                 android:paddingTop="10dp"
                 android:paddingLeft="15dp"/>
+            <Button
+                android:layout_width="80dp"
+                android:layout_height="40dp"
+                android:text="Make Favorite"
+                android:textSize="16sp"
+                android:id="@+id/fav_button"
+                android:paddingLeft="15dp"
+                android:layout_below="@+id/movieVote"
+                android:onClick="onClickAddFav"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -82,8 +83,7 @@
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:paddingTop="10dp"
-                android:layout_below="@+id/movieVote"/>
-
+                android:layout_below="@+id/fav_button"/>
             <Spinner
                 android:id="@+id/reviewer_spinner"
                 android:paddingLeft="15dp"
