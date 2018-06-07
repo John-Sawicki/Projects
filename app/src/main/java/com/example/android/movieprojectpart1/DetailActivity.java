@@ -120,10 +120,13 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         cv.put(FavoriteMovieEntry.VOTE_AVERAGE, movieData[3]);
         cv.put(FavoriteMovieEntry.OVERVIEW, movieData[4]);
         cv.put(FavoriteMovieEntry.ID, movieData[5]);
+        /*
         Uri uri = getContentResolver().insert(FavoriteMovieEntry.CONTENT_URI, cv);
         if(uri!=null){
             Toast.makeText(getBaseContext(), uri.toString(), Toast.LENGTH_SHORT).show();
         }
+        */
+        mDb.insert(FavoriteMovieEntry.TABLE_NAME,null,cv);
     }
     @Override
     public void onClick(String trailerName) {
