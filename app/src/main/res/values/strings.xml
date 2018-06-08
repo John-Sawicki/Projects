@@ -6,5 +6,7 @@
     <string name="release_date">Release Date</string>
     <string name="user_rating">User Rating</string>
     <string name="title_activity_review">ReviewActivity</string>
+    <string name="search_by_favorites">Search by Favorites</string>
     <string name="search_by_title">Search by Title</string>
+    <string name="delete_db">Delete Favorites</string>
 </resources>

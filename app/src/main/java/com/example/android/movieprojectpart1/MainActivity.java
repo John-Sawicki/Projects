@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
             +"&language=en-US   &page=1";
     private TextView errorMessage;
     private String[] moviePosterUrls = new String[20];
+    private String[] favoriteMoviePosterUrl = new String[20];
     private RecyclerView mRecyclerView;
     private MovieAdapter mMovieAdapter;
     public SQLiteDatabase mDb;
@@ -106,7 +107,11 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
             new GetMovieInfoTask().execute(moviddbUrl);
         }
         if(menuItemClicked==R.id.favorites){
-            //TODO update grid with values from
+            //TODO update grid with values from the db
+            String[] favoriteMovieUrls = getAllFavorites();
+        }
+        if(menuItemClicked==R.id.delete){
+            mDb.delete(FavoriteMovieEntry.TABLE_NAME,null, null);
         }
         return true;
     }
@@ -121,9 +126,21 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
         startActivity(intent);
 
     }
-    private Cursor getAllFavorites(){
-        return mDb.query(FavoriteMovieEntry.TABLE_NAME,
+    private String[] getAllFavorites(){
+        FavoriteDbHelper dbHelper = new FavoriteDbHelper(this);
+        mDb = dbHelper.getReadableDatabase();
+        Cursor cursor =  mDb.query(FavoriteMovieEntry.TABLE_NAME,
                 null,null,null, null, null,null);
+        if(cursor.moveToFirst()){
+            for(int i = 0;i<cursor.getCount(); i++){
+                cursor.moveToPosition(i);
+                Log.d("cursor count", cursor.getCount()+"");
+                String movieUrl = cursor.getString(cursor.getColumnIndex(FavoriteMovieEntry.POSTER_PATH));
+                Log.d("cursor url", movieUrl);
+                favoriteMoviePosterUrl[i] = movieUrl;
+            }
+        }
+        return favoriteMoviePosterUrl;
     }
 
 }
