@@ -136,6 +136,9 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
                 }else {//infavorite to remove from db
                     Log.d("stat", "unfavorited");
                     favButton.setColorFilter(getResources().getColor(R.color.gray));
+                    String[] whereArgs = {movieData[1]};    //delete the movie in the detail screen
+                    mDb.delete(FavoriteMovieEntry.TABLE_NAME,
+                            FavoriteMovieEntry.ORIGINAL_TITLE+" = ?",whereArgs);
                 }
             }
         });
@@ -173,7 +176,6 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
                 movieReviewArray = reviewArray;
                 Log.d("onPost author 2d",movieReviewArray[1][0] );
                 Log.d("onPost url 2d",movieReviewArray[1][1] );
-
                 for(int i=0; i<10; i++){//intent only works with 2d arrays
                 reviewerName[i]=movieReviewArray[i][0]; //values shown in the spinner
                 reviewerUrl[i]=movieReviewArray[i][1];  //values for the url

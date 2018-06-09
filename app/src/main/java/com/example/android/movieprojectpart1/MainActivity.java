@@ -78,7 +78,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
                 mMovieAdapter.setUrlData(moviePosterUrls);
                 Log.d("onPost", moviesInfo[0][0]);  //copy the async result to the variable on the UI thread to send to detail activity
                 Log.d("onPost", imageBaseURL+moviesInfo[0][0]);
-
                 mRecyclerView.setVisibility(View.VISIBLE);
                 errorMessage.setVisibility(View.INVISIBLE);
             }else{
