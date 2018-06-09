@@ -63,6 +63,7 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         overviewText = findViewById(R.id.movieOverview);
         mTrailerRV = findViewById(R.id.trailer_recycler_view);
         favButton = findViewById(R.id.fav_button);
+
         favButton.setColorFilter(getResources().getColor(R.color.gray));
         favButton.setBackgroundColor(getResources().getColor(R.color.white));
         LinearLayoutManager layoutManager = new LinearLayoutManager
@@ -124,6 +125,14 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
                 if(favoriteEnabled){
                     Log.d("stat", "favorited");
                     favButton.setColorFilter(getResources().getColor(R.color.yellow));
+                    ContentValues cv = new ContentValues();
+                    cv.put(FavoriteMovieEntry.POSTER_PATH, movieData[0]);
+                    cv.put(FavoriteMovieEntry.ORIGINAL_TITLE, movieData[1]);
+                    cv.put(FavoriteMovieEntry.RELEASE_DATE, movieData[2]);
+                    cv.put(FavoriteMovieEntry.VOTE_AVERAGE, movieData[3]);
+                    cv.put(FavoriteMovieEntry.OVERVIEW, movieData[4]);
+                    cv.put(FavoriteMovieEntry.ID, movieData[5]);
+                    mDb.insert(FavoriteMovieEntry.TABLE_NAME,null,cv);
                 }else {//infavorite to remove from db
                     Log.d("stat", "unfavorited");
                     favButton.setColorFilter(getResources().getColor(R.color.gray));
@@ -132,18 +141,6 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         });
     }
 
-    /*
-    public void onClickAddFav(View view){   //when the favorite button is pressed, add detail info to the database
-        ContentValues cv = new ContentValues();
-        cv.put(FavoriteMovieEntry.POSTER_PATH, movieData[0]);
-        cv.put(FavoriteMovieEntry.ORIGINAL_TITLE, movieData[1]);
-        cv.put(FavoriteMovieEntry.RELEASE_DATE, movieData[2]);
-        cv.put(FavoriteMovieEntry.VOTE_AVERAGE, movieData[3]);
-        cv.put(FavoriteMovieEntry.OVERVIEW, movieData[4]);
-        cv.put(FavoriteMovieEntry.ID, movieData[5]);
-        mDb.insert(FavoriteMovieEntry.TABLE_NAME,null,cv);
-    }
-    */
     @Override
     public void onClick(String trailerName) {
         Log.d("trailer url clicked",movieDetailUrl+trailerName);
@@ -194,6 +191,19 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
             }catch(Exception e){
                 e.printStackTrace();
             }
+        }
+    }
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean("favorite", favoriteEnabled);
+    }
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        favoriteEnabled= savedInstanceState.getBoolean("favorite");
+        if(favoriteEnabled){
+            favButton.setColorFilter(getResources().getColor(R.color.yellow));
         }
     }
 }
