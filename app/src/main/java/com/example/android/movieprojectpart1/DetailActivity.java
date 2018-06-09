@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.Spinner;
@@ -49,6 +50,8 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
     private boolean spinnerUpdated = false;
     ArrayAdapter aa;
     public SQLiteDatabase mDb;
+    private ImageButton favButton;
+    private boolean favoriteEnabled =false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +62,9 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         userRatingText = findViewById(R.id.movieVote);
         overviewText = findViewById(R.id.movieOverview);
         mTrailerRV = findViewById(R.id.trailer_recycler_view);
+        favButton = findViewById(R.id.fav_button);
+        favButton.setColorFilter(getResources().getColor(R.color.gray));
+        favButton.setBackgroundColor(getResources().getColor(R.color.white));
         LinearLayoutManager layoutManager = new LinearLayoutManager
                 (this,LinearLayoutManager.VERTICAL, false );
        //mReviewAdapter = new ReviewAdapter(this);
@@ -111,7 +117,22 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         mSpinner.setAdapter(aa);
         FavoriteDbHelper dbHelper = new FavoriteDbHelper(this);
         mDb = dbHelper.getWritableDatabase();
+        favButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                favoriteEnabled = !favoriteEnabled; //when the star is pressed, favorite is enable to enter the db
+                if(favoriteEnabled){
+                    Log.d("stat", "favorited");
+                    favButton.setColorFilter(getResources().getColor(R.color.yellow));
+                }else {//infavorite to remove from db
+                    Log.d("stat", "unfavorited");
+                    favButton.setColorFilter(getResources().getColor(R.color.gray));
+                }
+            }
+        });
     }
+
+    /*
     public void onClickAddFav(View view){   //when the favorite button is pressed, add detail info to the database
         ContentValues cv = new ContentValues();
         cv.put(FavoriteMovieEntry.POSTER_PATH, movieData[0]);
@@ -120,14 +141,9 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         cv.put(FavoriteMovieEntry.VOTE_AVERAGE, movieData[3]);
         cv.put(FavoriteMovieEntry.OVERVIEW, movieData[4]);
         cv.put(FavoriteMovieEntry.ID, movieData[5]);
-        /*
-        Uri uri = getContentResolver().insert(FavoriteMovieEntry.CONTENT_URI, cv);
-        if(uri!=null){
-            Toast.makeText(getBaseContext(), uri.toString(), Toast.LENGTH_SHORT).show();
-        }
-        */
         mDb.insert(FavoriteMovieEntry.TABLE_NAME,null,cv);
     }
+    */
     @Override
     public void onClick(String trailerName) {
         Log.d("trailer url clicked",movieDetailUrl+trailerName);

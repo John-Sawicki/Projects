@@ -58,20 +58,30 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
-                android:text="movie runtime"
+                android:text="user rating"
                 android:id="@+id/movieVote"
                 android:layout_below="@+id/voteTitle"
                 android:paddingTop="10dp"
                 android:paddingLeft="15dp"/>
-            <Button
-                android:layout_width="80dp"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:text="Make Favorite"
-                android:textSize="16sp"
-                android:id="@+id/fav_button"
-                android:paddingLeft="15dp"
+                android:layout_centerVertical="true"
+                android:text="Favorite"
+                android:textSize="18sp"
+                android:textStyle="bold"
                 android:layout_below="@+id/movieVote"
-                android:onClick="onClickAddFav"/>
+                android:id="@+id/favorite_textview"
+                android:paddingLeft="15dp"
+                android:paddingTop="10dp"/>
+                                                <ImageButton
+                                                    android:layout_width="80dp"
+                                                    android:layout_height="40dp"
+                                                    android:src="@android:drawable/btn_star"
+                                                    android:id="@+id/fav_button"
+                                                    android:paddingLeft="15dp"
+                                                    android:layout_below="@+id/movieVote"
+                                                    android:layout_toRightOf="@+id/favorite_textview"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
