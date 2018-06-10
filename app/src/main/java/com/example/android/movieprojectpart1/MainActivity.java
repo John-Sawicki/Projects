@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
         errorMessage = findViewById(R.id.errorText);
         errorMessage.setVisibility(View.INVISIBLE);     //only shows if there is am error retrieving json data
         FavoriteDbHelper dbHelper = new FavoriteDbHelper(this);
-        mDb = dbHelper.getWritableDatabase();   //TODO add methods to add favorite movies and retrieve favorite movies
+        mDb = dbHelper.getReadableDatabase();   //TODO add methods to add favorite movies and retrieve favorite movies
     }
     public class GetMovieInfoTask extends AsyncTask<String, Void, String[][]>{
         @Override

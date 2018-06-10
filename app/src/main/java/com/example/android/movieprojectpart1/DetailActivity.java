@@ -23,6 +23,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.movieprojectpart1.sqliteData.FavoriteCheck;
 import com.example.android.movieprojectpart1.sqliteData.FavoriteDbHelper;
 import com.example.android.movieprojectpart1.sqliteData.FavoriteMovieContract;
 import com.example.android.movieprojectpart1.sqliteData.FavoriteMovieContract.FavoriteMovieEntry;
@@ -51,7 +52,8 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
     ArrayAdapter aa;
     public SQLiteDatabase mDb;
     private ImageButton favButton;
-    private boolean favoriteEnabled =false;
+    private boolean favoriteEnabled =false; private boolean cursorFavorite = false;
+    FavoriteCheck mFavoriteCheck = new FavoriteCheck(this);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,9 +65,6 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         overviewText = findViewById(R.id.movieOverview);
         mTrailerRV = findViewById(R.id.trailer_recycler_view);
         favButton = findViewById(R.id.fav_button);
-
-        favButton.setColorFilter(getResources().getColor(R.color.gray));
-        favButton.setBackgroundColor(getResources().getColor(R.color.white));
         LinearLayoutManager layoutManager = new LinearLayoutManager
                 (this,LinearLayoutManager.VERTICAL, false );
        //mReviewAdapter = new ReviewAdapter(this);
@@ -96,6 +95,16 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
             Log.d("review author", movieReviewArray[1][0]);
             Log.d("review", movieReviewArray[9][1]);
         }
+        //todo create method to query db to check if movie title is in favorites. if it is, change star icon to yellow and favoriteEnabled to true.
+        cursorFavorite =mFavoriteCheck.CheckForFavorite(movieData[1]);
+        Log.d("fav cursor boolean", cursorFavorite+"");
+        if (cursorFavorite) {
+            favButton.setColorFilter(getResources().getColor(R.color.yellow));
+        }else {
+            favButton.setColorFilter(getResources().getColor(R.color.gray));
+        }
+
+        favButton.setBackgroundColor(getResources().getColor(R.color.white));
 
         mSpinner= findViewById(R.id.reviewer_spinner);
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
