@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
+import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
         mRecyclerView.setHasFixedSize(true);
         mMovieAdapter = new MovieAdapter(20, this);
         mRecyclerView.setAdapter(mMovieAdapter);
+        Log.d("movie url",moviddbUrl );
         new GetMovieInfoTask().execute(moviddbUrl);
         //poster = findViewById(R.id.singlePosterImage); replaced image with recycler view
         errorMessage = findViewById(R.id.errorText);
@@ -140,5 +142,17 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
             }
         }
         return favoriteMoviePosterUrl;
+    }
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("movie url",moviddbUrl );
+    }
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        moviddbUrl = savedInstanceState.getString("movie url");
+        Log.d("movie url restore",moviddbUrl );
+        new GetMovieInfoTask().execute(moviddbUrl);
     }
 }

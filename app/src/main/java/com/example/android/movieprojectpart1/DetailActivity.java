@@ -131,7 +131,8 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
             @Override
             public void onClick(View view) {
                 favoriteEnabled = !favoriteEnabled; //when the star is pressed, favorite is enable to enter the db
-                if(favoriteEnabled){
+                //if(favoriteEnabled){
+                if(favoriteEnabled&& !cursorFavorite){//add to db when star is pressed and the movie isn't already in the db
                     Log.d("stat", "favorited");
                     favButton.setColorFilter(getResources().getColor(R.color.yellow));
                     ContentValues cv = new ContentValues();

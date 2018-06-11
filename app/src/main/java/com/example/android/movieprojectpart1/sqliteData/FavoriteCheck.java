@@ -41,6 +41,7 @@ public class FavoriteCheck {
             }
         }
         Log.d("fav isFavorite", isFavorite+"");
+        //mDb.close();
         return isFavorite;
     }
 }
