@@ -1,5 +1,6 @@
 package com.example.android.movieprojectpart1;
 
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -36,6 +37,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
     private RecyclerView mRecyclerView;
     private MovieAdapter mMovieAdapter;
     public SQLiteDatabase mDb;
+    private ContentResolver resolver;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
         errorMessage.setVisibility(View.INVISIBLE);     //only shows if there is am error retrieving json data
         FavoriteDbHelper dbHelper = new FavoriteDbHelper(this);
         mDb = dbHelper.getReadableDatabase();   //TODO add methods to add favorite movies and retrieve favorite movies
+        resolver = getContentResolver();
     }
     public class GetMovieInfoTask extends AsyncTask<String, Void, String[][]>{
         @Override
@@ -108,8 +112,12 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
             new GetMovieInfoTask().execute(moviddbUrl);
         }
         if(menuItemClicked==R.id.favorites){
+            getAllFavorites();
             //TODO update grid with values from the db
-            String[] favoriteMovieUrls = getAllFavorites();
+            Log.d("getCR", favoriteMoviePosterUrl.length+" length in menu favs");
+            Log.d("getCR", favoriteMoviePosterUrl[1]+" url in index 1");
+            //for(int i=0; i<favoriteMovieUrls.length; i++)
+               // Log.d("favorite menu", favoriteMovieUrls[i]);
         }
         if(menuItemClicked==R.id.delete){
             mDb.delete(FavoriteMovieEntry.TABLE_NAME,null, null);
@@ -130,15 +138,17 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
     private String[] getAllFavorites(){
         FavoriteDbHelper dbHelper = new FavoriteDbHelper(this);
         mDb = dbHelper.getReadableDatabase();
-        Cursor cursor =  mDb.query(FavoriteMovieEntry.TABLE_NAME,
-                null,null,null, null, null,null);
+        //Cursor cursor =  mDb.query(FavoriteMovieEntry.TABLE_NAME, null,null,null, null, null,null);
+        Cursor cursor = getContentResolver().query(FavoriteMovieEntry.CONTENT_URI,
+                null, null, null, null);
         if(cursor.moveToFirst()){
-            for(int i = 0;i<cursor.getCount(); i++){
+            for(int i = 0;i<cursor.getCount(); i++){    //while(moveToNext)
                 cursor.moveToPosition(i);
-                Log.d("cursor count", cursor.getCount()+"");
+                Log.d("getCR", cursor.getCount()+"");
                 String movieUrl = cursor.getString(cursor.getColumnIndex(FavoriteMovieEntry.POSTER_PATH));
-                Log.d("cursor url", movieUrl);
+                Log.d("getCR", movieUrl);
                 favoriteMoviePosterUrl[i] = movieUrl;
+                Log.d("getCR", favoriteMoviePosterUrl[i]);
             }
         }
         return favoriteMoviePosterUrl;

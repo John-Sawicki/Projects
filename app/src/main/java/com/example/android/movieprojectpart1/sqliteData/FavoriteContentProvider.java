@@ -8,10 +8,9 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
-import android.os.Bundle;
-import android.os.CancellationSignal;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import static com.example.android.movieprojectpart1.sqliteData.FavoriteMovieContract.FavoriteMovieEntry;
 
@@ -19,12 +18,13 @@ public class FavoriteContentProvider extends ContentProvider{
     private FavoriteDbHelper mFavoriteDbHelper;
     public static final int MOVIES = 100;
     public static final int MOVIES_WITH_ID = 101;
+    String[] projectionQuery = {FavoriteMovieEntry.POSTER_PATH};    //detail saves only the values, but we only need the poster path
     private static final UriMatcher mUriMatcher = buildUriMatcher();
     public static UriMatcher buildUriMatcher(){
         UriMatcher uriMatcher = new UriMatcher((UriMatcher.NO_MATCH));
-        uriMatcher.addURI(FavoriteMovieContract.AUTHORITY, FavoriteMovieContract.PATH_TASKS,
+        uriMatcher.addURI(FavoriteMovieContract.AUTHORITY, FavoriteMovieContract.PATH_FAVORITES,
                 MOVIES);    //package, table, Uri identifying int value
-        uriMatcher.addURI(FavoriteMovieContract.AUTHORITY, FavoriteMovieContract.PATH_TASKS
+        uriMatcher.addURI(FavoriteMovieContract.AUTHORITY, FavoriteMovieContract.PATH_FAVORITES
                 +"/#",MOVIES_WITH_ID );//probably not going to be used
         return uriMatcher;
     }
@@ -40,6 +40,7 @@ public class FavoriteContentProvider extends ContentProvider{
     public String getType(@NonNull Uri uri) {
         return null;    //not used
     }
+
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues cv) {
@@ -66,13 +67,17 @@ public class FavoriteContentProvider extends ContentProvider{
     @Nullable
     @Override
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
-        final SQLiteDatabase db = mFavoriteDbHelper.getWritableDatabase();
+        final SQLiteDatabase db = mFavoriteDbHelper.getReadableDatabase();
         int match =mUriMatcher.match(uri);
         Cursor favCursor;
+        Log.d("query CP", "start");
         switch (match){
             case MOVIES:
                 favCursor = db.query(FavoriteMovieEntry.TABLE_NAME,
-                        projection, selection,selectionArgs,null, null, null);
+                        null,
+                        null,null,
+                        null, null, null);
+                //Log.d("query CP", "case");
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);

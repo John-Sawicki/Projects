@@ -103,9 +103,7 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         }else {
             favButton.setColorFilter(getResources().getColor(R.color.gray));
         }
-
         favButton.setBackgroundColor(getResources().getColor(R.color.white));
-
         mSpinner= findViewById(R.id.reviewer_spinner);
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -153,7 +151,6 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
             }
         });
     }
-
     @Override
     public void onClick(String trailerName) {
         Log.d("trailer url clicked",movieDetailUrl+trailerName);
