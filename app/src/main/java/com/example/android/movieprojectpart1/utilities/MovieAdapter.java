@@ -38,9 +38,12 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
     public void onBindViewHolder(MovieAdapterViewHolder holder, int position) {
         String moviePosterUrl = moviePosterUrls[position];  Log.d("onBindVH", moviePosterUrl);
          Context context = holder.moviePosterImageView.getContext();
-        Picasso.with(context)
-                .load(moviePosterUrl)
-                .into(holder.moviePosterImageView);
+         if(moviePosterUrl!=null){
+             Picasso.with(context)
+                     .load(moviePosterUrl)
+                     .into(holder.moviePosterImageView);
+         }
+
         //int consoleImage = dummyImages[position];
         //holder.moviePosterImageView.setImageResource(consoleImage);    //used to test grid layout
     }

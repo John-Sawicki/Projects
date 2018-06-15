@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
-import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -33,11 +32,13 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
             +"&language=en-US   &page=1";
     private TextView errorMessage;
     private String[] moviePosterUrls = new String[20];
+    private String[] favoriteMoviePosterSuffix = new String[20];
     private String[] favoriteMoviePosterUrl = new String[20];
     private RecyclerView mRecyclerView;
     private MovieAdapter mMovieAdapter;
     public SQLiteDatabase mDb;
     private ContentResolver resolver;
+    private String imageBaseURL = "https://image.tmdb.org/t/p/w185";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
         FavoriteDbHelper dbHelper = new FavoriteDbHelper(this);
         mDb = dbHelper.getReadableDatabase();   //TODO add methods to add favorite movies and retrieve favorite movies
         resolver = getContentResolver();
+
     }
     public class GetMovieInfoTask extends AsyncTask<String, Void, String[][]>{
         @Override
@@ -74,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
         }
         @Override
         protected void onPostExecute(String[][] strings) {
-            String imageBaseURL = "https://image.tmdb.org/t/p/w185";
+
             String fullURL = "";
             if(strings!=null){
                 moviesInfo = strings; //2d array with detail info for all 20 movies
@@ -92,6 +94,30 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
             }
         }
     }
+    public class loadFavMoviePosters extends AsyncTask<Void,Void, Void>{
+        @Override
+        protected Void doInBackground(Void... voids) {
+            return null;
+        }
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if(favoriteMoviePosterSuffix[0]!=null){
+                for(int i = 0; i<20;i++){
+                    favoriteMoviePosterUrl[i] =imageBaseURL+favoriteMoviePosterSuffix[i];
+                }
+                mMovieAdapter.setUrlData(favoriteMoviePosterUrl);
+                mRecyclerView.setVisibility(View.VISIBLE);
+                errorMessage.setVisibility(View.INVISIBLE);
+            }else{
+                mRecyclerView.setVisibility(View.INVISIBLE);
+                errorMessage.setText("You haven't selected any favorite movies");
+                errorMessage.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -114,8 +140,9 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
         if(menuItemClicked==R.id.favorites){
             getAllFavorites();
             //TODO update grid with values from the db
-            Log.d("getCR", favoriteMoviePosterUrl.length+" length in menu favs");
-            Log.d("getCR", favoriteMoviePosterUrl[1]+" url in index 1");
+            Log.d("getCR", favoriteMoviePosterSuffix.length+" length in menu favs");
+            Log.d("getCR", favoriteMoviePosterSuffix[1]+" url in index 1");
+            new loadFavMoviePosters().execute();
             //for(int i=0; i<favoriteMovieUrls.length; i++)
                // Log.d("favorite menu", favoriteMovieUrls[i]);
         }
@@ -147,11 +174,11 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
                 Log.d("getCR", cursor.getCount()+"");
                 String movieUrl = cursor.getString(cursor.getColumnIndex(FavoriteMovieEntry.POSTER_PATH));
                 Log.d("getCR", movieUrl);
-                favoriteMoviePosterUrl[i] = movieUrl;
-                Log.d("getCR", favoriteMoviePosterUrl[i]);
+                favoriteMoviePosterSuffix[i] = movieUrl;
+                Log.d("getCR", favoriteMoviePosterSuffix[i]);
             }
         }
-        return favoriteMoviePosterUrl;
+        return favoriteMoviePosterSuffix;
     }
     @Override
     public void onSaveInstanceState(Bundle outState) {
