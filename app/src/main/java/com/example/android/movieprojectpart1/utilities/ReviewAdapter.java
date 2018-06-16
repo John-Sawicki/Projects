@@ -59,7 +59,5 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewAdap
     public void setReviewerNames(String[] reviewerNames){
         mReviewerNames = reviewerNames;
         notifyDataSetChanged();
-
     }
-
 }

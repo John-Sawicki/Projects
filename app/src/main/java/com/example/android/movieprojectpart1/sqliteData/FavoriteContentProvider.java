@@ -77,7 +77,6 @@ public class FavoriteContentProvider extends ContentProvider{
                         null,
                         null,null,
                         null, null, null);
-                //Log.d("query CP", "case");
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);

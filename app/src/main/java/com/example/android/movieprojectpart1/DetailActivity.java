@@ -44,9 +44,8 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
     private String [][] movieReviewArray = new String[10][2];
     private String movieId = ""+157336;
     private String movieDetailUrl, youTubeUrl="https://www.youtube.com/watch?v=";   //base url with no key
-    private ReviewAdapter mReviewAdapter;
     private TrailerAdapter mTrailerAdapter;
-    private RecyclerView mTrailerRV, mReviewerRV;
+    private RecyclerView mTrailerRV;
     private Spinner mSpinner;
     private boolean spinnerUpdated = false;
     ArrayAdapter aa;
@@ -67,8 +66,6 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         favButton = findViewById(R.id.fav_button);
         LinearLayoutManager layoutManager = new LinearLayoutManager
                 (this,LinearLayoutManager.VERTICAL, false );
-       //mReviewAdapter = new ReviewAdapter(this);
-        //mReviewerRV.setAdapter(mReviewAdapter);
         mTrailerAdapter = new TrailerAdapter(this);
         mTrailerRV.setLayoutManager(layoutManager);
         mTrailerRV.setAdapter(mTrailerAdapter);
@@ -95,7 +92,6 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
             Log.d("review author", movieReviewArray[1][0]);
             Log.d("review", movieReviewArray[9][1]);
         }
-        //todo create method to query db to check if movie title is in favorites. if it is, change star icon to yellow and favoriteEnabled to true.
         cursorFavorite =mFavoriteCheck.CheckForFavorite(movieData[1]);
         Log.d("fav cursor boolean", cursorFavorite+"");
         if (cursorFavorite) {
@@ -110,7 +106,6 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if(spinnerUpdated){
                     Log.d("spinner item url",reviewerUrl[i] );
-                    // Log.d("reviewer url clicked",reviewerUrl[i]);
                     if(reviewerUrl[i]!="0"){
                         Intent reviewerIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(reviewerUrl[i]));
                         startActivity(reviewerIntent);
@@ -121,15 +116,14 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         });
          aa = new ArrayAdapter(this,android.R.layout.simple_spinner_item);
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        //Setting the ArrayAdapter data on the Spinner
-        mSpinner.setAdapter(aa);
+        mSpinner.setAdapter(aa);   //Setting the ArrayAdapter data on the Spinner
         FavoriteDbHelper dbHelper = new FavoriteDbHelper(this);
         mDb = dbHelper.getWritableDatabase();
         favButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 favoriteEnabled = !favoriteEnabled; //when the star is pressed, favorite is enable to enter the db
-                //if(favoriteEnabled){
+
                 if(favoriteEnabled&& !cursorFavorite){//add to db when star is pressed and the movie isn't already in the db
                     Log.d("stat", "favorited");
                     favButton.setColorFilter(getResources().getColor(R.color.yellow));
@@ -160,7 +154,6 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
     public class GetDetailTrailerInfoTask extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... strings) {    //pass in url   return 2darray of parsed json
-            String[] parsedJson;
             try{
                 String jsonStringFromWeb = JsonUtility.getResponseFromSite(strings[0]);
 
@@ -172,7 +165,7 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         }
         @Override
         protected void onPostExecute(String jsonRawString) {//json string sent to onPost so 2 seperate arrays are created, one for reviews and one for trailers
-            String[] youtubeKeyArray, nonNonReviewName;
+            String[] youtubeKeyArray;
             String[][] reviewArray;
             try{
                 youtubeKeyArray = JsonUtility.formatDetailTrailerJson(jsonRawString);

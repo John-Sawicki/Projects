@@ -15,10 +15,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-
 import com.example.android.movieprojectpart1.sqliteData.FavoriteDbHelper;
-//import com.example.android.movieprojectpart1.sqliteData.FavoriteMovieContract;
-  import static com.example.android.movieprojectpart1.sqliteData.FavoriteMovieContract.FavoriteMovieEntry;
+import static com.example.android.movieprojectpart1.sqliteData.FavoriteMovieContract.FavoriteMovieEntry;
 import com.example.android.movieprojectpart1.utilities.API;
 import com.example.android.movieprojectpart1.utilities.JsonUtility;
 import com.example.android.movieprojectpart1.utilities.MovieAdapter;
@@ -58,7 +56,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
         FavoriteDbHelper dbHelper = new FavoriteDbHelper(this);
         mDb = dbHelper.getReadableDatabase();   //TODO add methods to add favorite movies and retrieve favorite movies
         resolver = getContentResolver();
-
     }
     public class GetMovieInfoTask extends AsyncTask<String, Void, String[][]>{
         @Override
@@ -76,8 +73,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
         }
         @Override
         protected void onPostExecute(String[][] strings) {
-
-            String fullURL = "";
             if(strings!=null){
                 moviesInfo = strings; //2d array with detail info for all 20 movies
                 for(int i = 0;i<20; i++){
@@ -104,6 +99,9 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
             super.onPostExecute(aVoid);
             if(favoriteMoviePosterSuffix[0]!=null){
                 for(int i = 0; i<20;i++){
+                    if(favoriteMoviePosterSuffix[i]!=null){
+
+                    }
                     favoriteMoviePosterUrl[i] =imageBaseURL+favoriteMoviePosterSuffix[i];
                 }
                 mMovieAdapter.setUrlData(favoriteMoviePosterUrl);
@@ -116,8 +114,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
             }
         }
     }
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -143,8 +139,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
             Log.d("getCR", favoriteMoviePosterSuffix.length+" length in menu favs");
             Log.d("getCR", favoriteMoviePosterSuffix[1]+" url in index 1");
             new loadFavMoviePosters().execute();
-            //for(int i=0; i<favoriteMovieUrls.length; i++)
-               // Log.d("favorite menu", favoriteMovieUrls[i]);
         }
         if(menuItemClicked==R.id.delete){
             mDb.delete(FavoriteMovieEntry.TABLE_NAME,null, null);
@@ -165,7 +159,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
     private String[] getAllFavorites(){
         FavoriteDbHelper dbHelper = new FavoriteDbHelper(this);
         mDb = dbHelper.getReadableDatabase();
-        //Cursor cursor =  mDb.query(FavoriteMovieEntry.TABLE_NAME, null,null,null, null, null,null);
         Cursor cursor = getContentResolver().query(FavoriteMovieEntry.CONTENT_URI,
                 null, null, null, null);
         if(cursor.moveToFirst()){
