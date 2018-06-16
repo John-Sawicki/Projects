@@ -87,9 +87,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/read_reviews"
-                android:text="Read Review \nfrom"
-                android:lines="2"
-                android:minLines="2"
+                android:text="Reviewer List"
                 android:paddingLeft="15dp"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -101,8 +99,15 @@
                 android:layout_width="140dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/read_reviews"
-                android:paddingTop="10dp">
-            </Spinner>
+                android:paddingTop="10dp"/>
+            <Button
+                android:id="@+id/reviewButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="15dp"
+                android:paddingTop="10dp"
+                android:text="@string/search_reviewer"
+                android:layout_below="@+id/reviewer_spinner"/>
                                         <ImageView
                                             android:layout_width="166.5dp"
                                             android:layout_height="246.6dp"
@@ -118,7 +123,7 @@
                 android:textSize="16sp"
                 android:text="movie overview"
                 android:id="@+id/movieOverview"
-                android:layout_below="@+id/moviePoster"
+                android:layout_below="@+id/reviewButton"
                 android:paddingTop="10dp"
                 android:paddingLeft="15dp"/>
         </RelativeLayout>

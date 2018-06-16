@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
         errorMessage = findViewById(R.id.errorText);
         errorMessage.setVisibility(View.INVISIBLE);     //only shows if there is am error retrieving json data
         FavoriteDbHelper dbHelper = new FavoriteDbHelper(this);
-        mDb = dbHelper.getReadableDatabase();   //TODO add methods to add favorite movies and retrieve favorite movies
+        mDb = dbHelper.getReadableDatabase();
         resolver = getContentResolver();
     }
     public class GetMovieInfoTask extends AsyncTask<String, Void, String[][]>{
@@ -141,6 +141,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
         }
         if(menuItemClicked==R.id.delete){
             mDb.delete(FavoriteMovieEntry.TABLE_NAME,null, null);
+
         }
         return true;
     }
@@ -157,12 +158,24 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
     }
     private String[] getAllFavorites(){
         FavoriteDbHelper dbHelper = new FavoriteDbHelper(this);
+        for(int j= 0; j<20; j++){
+            for(int k = 0; k<6;k++){
+                moviesInfo[j][k]="";
+            }
+        }
         mDb = dbHelper.getReadableDatabase();
         Cursor cursor = getContentResolver().query(FavoriteMovieEntry.CONTENT_URI,
                 null, null, null, null);
         if(cursor.moveToFirst()){
             for(int i = 0;i<cursor.getCount(); i++){    //while(moveToNext)
                 cursor.moveToPosition(i);
+
+                moviesInfo[i][0]= cursor.getString(cursor.getColumnIndex(FavoriteMovieEntry.POSTER_PATH));
+                moviesInfo[i][1]= cursor.getString(cursor.getColumnIndex(FavoriteMovieEntry.ORIGINAL_TITLE));
+                moviesInfo[i][2]= cursor.getString(cursor.getColumnIndex(FavoriteMovieEntry.RELEASE_DATE));
+                moviesInfo[i][3]= cursor.getString(cursor.getColumnIndex(FavoriteMovieEntry.VOTE_AVERAGE));
+                moviesInfo[i][4]= cursor.getString(cursor.getColumnIndex(FavoriteMovieEntry.OVERVIEW));
+                moviesInfo[i][5]= cursor.getString(cursor.getColumnIndex(FavoriteMovieEntry.ID));
                 Log.d("getCR", cursor.getCount()+"");
                 String movieUrl = cursor.getString(cursor.getColumnIndex(FavoriteMovieEntry.POSTER_PATH));
                 Log.d("getCR", movieUrl);
@@ -170,6 +183,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
                 Log.d("getCR", favoriteMoviePosterSuffix[i]);
             }
         }
+        cursor.close(); //prevent memory leaks
         return favoriteMoviePosterSuffix;
     }
     @Override
@@ -191,7 +205,5 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
             getAllFavorites();
             new loadFavMoviePosters().execute();
         }
-
-
     }
 }

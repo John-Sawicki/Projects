@@ -47,12 +47,15 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
     private TrailerAdapter mTrailerAdapter;
     private RecyclerView mTrailerRV;
     private Spinner mSpinner;
+    private Button reviewerButton;
+    private String reviewerNameSpinner;
     private boolean spinnerUpdated = false;
     ArrayAdapter aa;
     public SQLiteDatabase mDb;
     private ImageButton favButton;
     private boolean favoriteEnabled =false; private boolean cursorFavorite = false;
     FavoriteCheck mFavoriteCheck = new FavoriteCheck(this);
+    private boolean spinnerAtStart = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +67,7 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         overviewText = findViewById(R.id.movieOverview);
         mTrailerRV = findViewById(R.id.trailer_recycler_view);
         favButton = findViewById(R.id.fav_button);
+        reviewerButton = findViewById(R.id.reviewButton);
         LinearLayoutManager layoutManager = new LinearLayoutManager
                 (this,LinearLayoutManager.VERTICAL, false );
         mTrailerAdapter = new TrailerAdapter(this);
@@ -104,15 +108,20 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if(spinnerUpdated){
-                    Log.d("spinner item url",reviewerUrl[i] );
-                    if(reviewerUrl[i]!="0"){
-                        Intent reviewerIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(reviewerUrl[i]));
-                        startActivity(reviewerIntent);
-                    }
+                if(reviewerUrl[i]!="0"){
+                    reviewerNameSpinner=reviewerUrl[i];
                 }
             }
             @Override public void onNothingSelected(AdapterView<?> adapterView) {}
+        });
+        reviewerButton.setOnClickListener(new View.OnClickListener() {  //get the reviewer name from the spinner and go the the reviewer url
+
+            @Override
+            public void onClick(View view) {
+                Log.d("reviewer", reviewerNameSpinner);
+                Intent reviewerIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(reviewerNameSpinner));
+                startActivity(reviewerIntent);
+            }
         });
          aa = new ArrayAdapter(this,android.R.layout.simple_spinner_item);
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -139,8 +148,9 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
                     Log.d("stat", "unfavorited");
                     favButton.setColorFilter(getResources().getColor(R.color.gray));
                     String[] whereArgs = {movieData[1]};    //delete the movie in the detail screen
-                    mDb.delete(FavoriteMovieEntry.TABLE_NAME,
+                    int rowDeleted =mDb.delete(FavoriteMovieEntry.TABLE_NAME,
                             FavoriteMovieEntry.ORIGINAL_TITLE+" = ?",whereArgs);
+
                 }
             }
         });
@@ -185,10 +195,21 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
                 }
                 Log.d("onPost author 1d",reviewerName[1]);
                 Log.d("onPost url 1d",reviewerUrl[1] );
+                /*
+                aa.add("");//add nothing for the first reviewer to prevent screen from going to the review automatically
+                for(int i =1; i<reviewerName.length+1;i++){
+                    Log.d("spinner adapter", reviewerName[i]);
+                    if(reviewerName[i]!="0"){
+                        aa.add(reviewerName[i]);
+                    }
+                }
+                */
+
                 for(int i =0; i<reviewerName.length;i++){
                     Log.d("spinner adapter", reviewerName[i]);
                     if(reviewerName[i]!="0")  aa.add(reviewerName[i]);
                 }
+
                 spinnerUpdated=true;
             }catch(Exception e){
                 e.printStackTrace();

@@ -9,4 +9,5 @@
     <string name="search_by_favorites">Search by Favorites</string>
     <string name="search_by_title">Search by Title</string>
     <string name="delete_db">Delete Favorites</string>
+    <string name="search_reviewer">Search Reviewer</string>
 </resources>
