@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
     public SQLiteDatabase mDb;
     private ContentResolver resolver;
     private String imageBaseURL = "https://image.tmdb.org/t/p/w185";
-
+    private String searchMethod;    //saves the search method for rotations and returing to the app for favorites, popular, or rating
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,9 +99,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
             super.onPostExecute(aVoid);
             if(favoriteMoviePosterSuffix[0]!=null){
                 for(int i = 0; i<20;i++){
-                    if(favoriteMoviePosterSuffix[i]!=null){
-
-                    }
                     favoriteMoviePosterUrl[i] =imageBaseURL+favoriteMoviePosterSuffix[i];
                 }
                 mMovieAdapter.setUrlData(favoriteMoviePosterUrl);
@@ -124,18 +121,20 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
     public boolean onOptionsItemSelected(MenuItem item) {
         int menuItemClicked = item.getItemId();
         if(menuItemClicked==R.id.menu_popular){
+            searchMethod = "popular";
             moviddbUrl = "https://api.themoviedb.org/3/movie/popular?api_key="  + API.key +"&language=en-US&page=1";
             Log.d("menu", "popular menu clicked");
             new GetMovieInfoTask().execute(moviddbUrl);
         }
         if(menuItemClicked==R.id.menu_rating){
+            searchMethod = "rating";
             moviddbUrl="https://api.themoviedb.org/3/movie/top_rated?api_key="+   API.key +"&language=en-US&page=1";
             Log.d("menu", "rating menu clicked");
             new GetMovieInfoTask().execute(moviddbUrl);
         }
         if(menuItemClicked==R.id.favorites){
             getAllFavorites();
-            //TODO update grid with values from the db
+            searchMethod ="favorites";
             Log.d("getCR", favoriteMoviePosterSuffix.length+" length in menu favs");
             Log.d("getCR", favoriteMoviePosterSuffix[1]+" url in index 1");
             new loadFavMoviePosters().execute();
@@ -177,12 +176,22 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString("movie url",moviddbUrl );
+        outState.putString("search method",searchMethod );
     }
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         moviddbUrl = savedInstanceState.getString("movie url");
+        searchMethod = savedInstanceState.getString("search method");
         Log.d("movie url restore",moviddbUrl );
-        new GetMovieInfoTask().execute(moviddbUrl);
+        Log.d("movie search method",searchMethod );
+        if(searchMethod.equals("popular")||searchMethod.equals("rating")){
+            new GetMovieInfoTask().execute(moviddbUrl);
+        }else{
+            getAllFavorites();
+            new loadFavMoviePosters().execute();
+        }
+
+
     }
 }
