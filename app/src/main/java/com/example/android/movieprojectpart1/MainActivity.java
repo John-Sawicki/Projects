@@ -158,25 +158,27 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
     }
     private String[] getAllFavorites(){
         FavoriteDbHelper dbHelper = new FavoriteDbHelper(this);
-        for(int j= 0; j<20; j++){
+        for(int j= 0; j<20; j++){   //clear all values so if there are less movies due to a delete the poster wouldn't show
+            favoriteMoviePosterSuffix[j] = "";
+
             for(int k = 0; k<6;k++){
                 moviesInfo[j][k]="";
             }
         }
+        //9:10pm
         mDb = dbHelper.getReadableDatabase();
         Cursor cursor = getContentResolver().query(FavoriteMovieEntry.CONTENT_URI,
                 null, null, null, null);
         if(cursor.moveToFirst()){
             for(int i = 0;i<cursor.getCount(); i++){    //while(moveToNext)
                 cursor.moveToPosition(i);
-
                 moviesInfo[i][0]= cursor.getString(cursor.getColumnIndex(FavoriteMovieEntry.POSTER_PATH));
                 moviesInfo[i][1]= cursor.getString(cursor.getColumnIndex(FavoriteMovieEntry.ORIGINAL_TITLE));
                 moviesInfo[i][2]= cursor.getString(cursor.getColumnIndex(FavoriteMovieEntry.RELEASE_DATE));
                 moviesInfo[i][3]= cursor.getString(cursor.getColumnIndex(FavoriteMovieEntry.VOTE_AVERAGE));
                 moviesInfo[i][4]= cursor.getString(cursor.getColumnIndex(FavoriteMovieEntry.OVERVIEW));
                 moviesInfo[i][5]= cursor.getString(cursor.getColumnIndex(FavoriteMovieEntry.ID));
-                Log.d("getCR", cursor.getCount()+"");
+                //Log.d("getCR", cursor.getCount()+"");
                 String movieUrl = cursor.getString(cursor.getColumnIndex(FavoriteMovieEntry.POSTER_PATH));
                 Log.d("getCR", movieUrl);
                 favoriteMoviePosterSuffix[i] = movieUrl;
@@ -201,7 +203,9 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
         Log.d("movie search method",searchMethod );
         if(searchMethod.equals("popular")||searchMethod.equals("rating")){
             new GetMovieInfoTask().execute(moviddbUrl);
+            Log.d("restore","if - pop or rating");
         }else{
+            Log.d("restore", "else - favorites");
             getAllFavorites();
             new loadFavMoviePosters().execute();
         }

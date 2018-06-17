@@ -38,7 +38,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
     public void onBindViewHolder(MovieAdapterViewHolder holder, int position) {
         String moviePosterUrl = moviePosterUrls[position];  Log.d("onBindVH", moviePosterUrl);
          Context context = holder.moviePosterImageView.getContext();
-         if(!moviePosterUrl.equals("https://image.tmdb.org/t/p/w185null")){
+         if(!moviePosterUrl.equals("https://image.tmdb.org/t/p/w185null")  ||  !moviePosterUrl.equals("") ){
              Log.d("movieAdapter",moviePosterUrl);
              Picasso.with(context)
                      .load(moviePosterUrl)

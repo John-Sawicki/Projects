@@ -97,7 +97,7 @@
                 android:id="@+id/reviewer_spinner"
                 android:paddingLeft="15dp"
                 android:layout_width="140dp"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_below="@+id/read_reviews"
                 android:paddingTop="10dp"/>
             <Button
