@@ -178,7 +178,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
                 moviesInfo[i][3]= cursor.getString(cursor.getColumnIndex(FavoriteMovieEntry.VOTE_AVERAGE));
                 moviesInfo[i][4]= cursor.getString(cursor.getColumnIndex(FavoriteMovieEntry.OVERVIEW));
                 moviesInfo[i][5]= cursor.getString(cursor.getColumnIndex(FavoriteMovieEntry.ID));
-                //Log.d("getCR", cursor.getCount()+"");
                 String movieUrl = cursor.getString(cursor.getColumnIndex(FavoriteMovieEntry.POSTER_PATH));
                 Log.d("getCR", movieUrl);
                 favoriteMoviePosterSuffix[i] = movieUrl;
