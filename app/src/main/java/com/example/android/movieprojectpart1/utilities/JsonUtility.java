@@ -35,6 +35,7 @@ public class JsonUtility {
     }
     public static String[][] formatJson(String rawJSON) throws JSONException{
         String mRawJSON = rawJSON;
+        Log.d("rawJson", mRawJSON);
         String formattedJson[][]= new String[20][6];
         try{
             JSONObject movieJson = new JSONObject(mRawJSON);

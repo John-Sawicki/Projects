@@ -56,6 +56,7 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
     private boolean favoriteEnabled =false; private boolean cursorFavorite = false;
     FavoriteCheck mFavoriteCheck = new FavoriteCheck(this);
     private boolean spinnerAtStart = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

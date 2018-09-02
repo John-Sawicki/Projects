@@ -20,8 +20,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
         mNumberOfMovies = numberOfMovies;
         mOnClickListener = gridItemClickListener;
     }
-
-
     public interface GridItemClickListener{
         void onGridItemClick(int index);
     }
@@ -36,7 +34,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
     }
     @Override
     public void onBindViewHolder(MovieAdapterViewHolder holder, int position) {
-        String moviePosterUrl = moviePosterUrls[position];  Log.d("onBindVH", moviePosterUrl);
+        String moviePosterUrl = moviePosterUrls[position];
+        Log.d("onBindVH", moviePosterUrl);
          Context context = holder.moviePosterImageView.getContext();
          if(!moviePosterUrl.equals("https://image.tmdb.org/t/p/w185null")  ||  !moviePosterUrl.equals("") ){
              Log.d("movieAdapter",moviePosterUrl);
@@ -63,6 +62,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
             moviePosterImageView = view.findViewById(R.id.grid_poster);
             view.setOnClickListener(this);
         }
+
 
         @Override
         public void onClick(View view) {

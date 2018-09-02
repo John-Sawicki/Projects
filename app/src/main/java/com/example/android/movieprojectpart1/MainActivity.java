@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
         FavoriteDbHelper dbHelper = new FavoriteDbHelper(this);
         mDb = dbHelper.getReadableDatabase();
         resolver = getContentResolver();
+
     }
     public class GetMovieInfoTask extends AsyncTask<String, Void, String[][]>{
         @Override
